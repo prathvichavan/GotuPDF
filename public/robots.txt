@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+# Block API routes to save crawl budget
+Disallow: /api/
+
+# Explicitly allow Google crawlers used for search and ads review
+User-agent: Googlebot
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+Sitemap: https://gotupdf.com/sitemap.xml
