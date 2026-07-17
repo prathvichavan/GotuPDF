@@ -62,7 +62,7 @@ export const metadata: Metadata = {
     images: [`${SITE_URL}/logo.png`],
   },
   verification: {
-    google: "your-google-verification-code",
+    google: "HLHhJmvgdS31o63X59uOMRLucmlFW_7LnU0griovBX0",
   },
 };
 
