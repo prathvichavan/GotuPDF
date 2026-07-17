@@ -2,7 +2,7 @@ export const SITE_NAME = "GotuPDF";
 export const AUTHOR_NAME = "GotuPDF Team";
 export const CONTACT_EMAIL = "krishanmohankumar9311@gmail.com";
 export const SITE_DESCRIPTION = "Professional PDF Tools - Convert, Merge, Split, Compress PDFs Online for Free";
-export const SITE_URL = "https://www.gotupdf.com";
+export const SITE_URL = "https://gotupdf.vercel.app";
 export const SITE_KEYWORDS = "pdf tools, convert pdf, merge pdf, split pdf, compress pdf, pdf to word, word to pdf, pdf converter";
 
 export const BRAND_COLORS = {
