@@ -2,8 +2,6 @@ import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import connectDB from "./mongodb";
-import User from "@/models/User";
 
 export const authOptions: NextAuthOptions = {
     providers: [
@@ -21,6 +19,9 @@ export const authOptions: NextAuthOptions = {
                 if (!credentials?.email || !credentials?.password) {
                     throw new Error("Email and password are required");
                 }
+
+                const { default: connectDB } = await import("./mongodb");
+                const { default: User } = await import("@/models/User");
 
                 await connectDB();
 
@@ -52,6 +53,9 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async signIn({ user, account }) {
             if (account?.provider === "google") {
+                const { default: connectDB } = await import("./mongodb");
+                const { default: User } = await import("@/models/User");
+
                 await connectDB();
                 
                 const existingUser = await User.findOne({ email: user.email });
