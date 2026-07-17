@@ -1,7 +1,10 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
+import { GoogleAnalytics } from "@next/third-parties/google";
+
 import "./globals.css";
+
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
@@ -9,7 +12,12 @@ import ThemeProvider from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
 import { UsageLimitProvider } from "@/components/UsageLimitProvider";
 import { UsageLimitModals } from "@/components/UsageLimitModals";
-import { SITE_NAME, SITE_KEYWORDS, SITE_URL } from "@/lib/constants";
+
+import {
+  SITE_NAME,
+  SITE_KEYWORDS,
+  SITE_URL,
+} from "@/lib/constants";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,15 +27,21 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+
   title: {
     default: `Professional PDF Tools Online for Free | ${SITE_NAME}`,
     template: `%s | ${SITE_NAME}`,
   },
-  description: "Professional PDF tools to merge, convert, split, compress, and edit files online.",
+
+  description:
+    "Professional PDF tools to merge, convert, split, compress, and edit files online.",
+
   keywords: SITE_KEYWORDS,
+
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
   publisher: SITE_NAME,
+
   robots: {
     index: true,
     follow: true,
@@ -39,12 +53,14 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
+
   openGraph: {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
     title: `Professional PDF Tools Online | ${SITE_NAME}`,
-    description: "Professional PDF tools to merge, convert, split, compress, and edit files online.",
+    description:
+      "Professional PDF tools to merge, convert, split, compress, and edit files online.",
     siteName: SITE_NAME,
     images: [
       {
@@ -55,12 +71,15 @@ export const metadata: Metadata = {
       },
     ],
   },
+
   twitter: {
     card: "summary_large_image",
     title: `Professional PDF Tools Online | ${SITE_NAME}`,
-    description: "Professional PDF tools to merge, convert, split, compress, and edit files online.",
+    description:
+      "Professional PDF tools to merge, convert, split, compress, and edit files online.",
     images: [`${SITE_URL}/logo.png`],
   },
+
   verification: {
     google: "HLHhJmvgdS31o63X59uOMRLucmlFW_7LnU0griovBX0",
   },
@@ -83,42 +102,50 @@ export default function RootLayout({
       {
         "@type": "Organization",
         "@id": `${SITE_URL}#organization`,
-        "name": SITE_NAME,
-        "url": SITE_URL,
-        "logo": {
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: {
           "@type": "ImageObject",
-          "url": `${SITE_URL}/logo.png`
+          url: `${SITE_URL}/logo.png`,
         },
-        "sameAs": [
-          // Add social media URLs here if available
-        ]
+        sameAs: [],
       },
       {
         "@type": "WebSite",
         "@id": `${SITE_URL}#website`,
-        "url": SITE_URL,
-        "name": SITE_NAME,
-        "description": "Professional PDF tools to merge, convert, split, compress, and edit files online.",
-        "publisher": {
-          "@id": `${SITE_URL}#organization`
+        url: SITE_URL,
+        name: SITE_NAME,
+        description:
+          "Professional PDF tools to merge, convert, split, compress, and edit files online.",
+        publisher: {
+          "@id": `${SITE_URL}#organization`,
         },
-        "inLanguage": "en-US"
-      }
-    ]
+        inLanguage: "en-US",
+      },
+    ],
   };
 
   return (
-    <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
+    <html
+      lang="en"
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
-        {/* Anti-flicker: set theme before paint */}
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(!t)t='light';if(t==='dark')document.documentElement.classList.add('dark');else document.documentElement.classList.remove('dark');}catch(e){}})();`,
           }}
         />
       </head>
-      <body className="font-sans antialiased bg-[var(--bg-primary)] text-[var(--text-primary)]" suppressHydrationWarning>
-        {/* JSON-LD structured data (placed in body per Next.js recommendation) */}
+
+      <body
+        className="font-sans antialiased bg-[var(--bg-primary)] text-[var(--text-primary)]"
+        suppressHydrationWarning
+      >
+        {/* Google Analytics */}
+        <GoogleAnalytics gaId="G-YNPSWXCRWR" />
+                {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
           suppressHydrationWarning
@@ -134,19 +161,28 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
 
-        {/* Cookie Consent Management (GDPR/CCPA/DPDP Compliant) */}
+        {/* Cookie Consent */}
         <Script id="cookie-consent-manager" strategy="afterInteractive">
           {`
-            (function() {
+            (function () {
               function enableTracking() {
                 window.adsbygoogle = window.adsbygoogle || [];
-                window.dispatchEvent(new CustomEvent('cookieConsentAccepted'));
+                window.dispatchEvent(
+                  new CustomEvent("cookieConsentAccepted")
+                );
               }
-              window.addEventListener('load', function() {
-                var consent = localStorage.getItem('cookieConsent');
-                if (consent === 'accepted') { enableTracking(); }
+
+              window.addEventListener("load", function () {
+                var consent = localStorage.getItem("cookieConsent");
+                if (consent === "accepted") {
+                  enableTracking();
+                }
               });
-              window.addEventListener('cookieConsentAccepted', enableTracking);
+
+              window.addEventListener(
+                "cookieConsentAccepted",
+                enableTracking
+              );
             })();
           `}
         </Script>
@@ -155,7 +191,11 @@ export default function RootLayout({
           <UsageLimitProvider>
             <ThemeProvider>
               <Header />
-              <main className="min-h-screen">{children}</main>
+
+              <main className="min-h-screen">
+                {children}
+              </main>
+
               <Footer />
               <CookieConsent />
               <UsageLimitModals />
