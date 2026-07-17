@@ -183,7 +183,7 @@ function extractTextRuns(
     if (contents instanceof PDFArray) {
         for (let i = 0; i < contents.size(); i++) {
             const ref = contents.get(i);
-            const stream = pdfDoc.context.lookup(ref, PDFRawStream);
+            const stream = pdfDoc.context.lookup(ref, PDFRawStream as any) as unknown as PDFRawStream;
             streams.push({ index: i, ref: ref instanceof PDFRef ? ref : null, stream });
         }
     } else if (contents instanceof PDFRawStream) {
@@ -427,7 +427,7 @@ function resolveFontEncoding(pdfDoc: PDFDocument, font: PDFDict): FontEncoding {
     if (toUnicodeRef instanceof PDFRawStream) {
         toUnicodeStream = toUnicodeRef;
     } else if (toUnicodeRef instanceof PDFRef) {
-        toUnicodeStream = pdfDoc.context.lookupMaybe(toUnicodeRef, PDFRawStream) || null;
+        toUnicodeStream = (pdfDoc.context.lookupMaybe(toUnicodeRef, PDFRawStream as any) as unknown as PDFRawStream) || null;
     }
 
     // For Type0 fonts, ToUnicode may be on the descendant
@@ -438,7 +438,7 @@ function resolveFontEncoding(pdfDoc: PDFDocument, font: PDFDict): FontEncoding {
             if (descendantToUnicode instanceof PDFRawStream) {
                 toUnicodeStream = descendantToUnicode;
             } else if (descendantToUnicode instanceof PDFRef) {
-                toUnicodeStream = pdfDoc.context.lookupMaybe(descendantToUnicode, PDFRawStream) || null;
+                toUnicodeStream = (pdfDoc.context.lookupMaybe(descendantToUnicode, PDFRawStream as any) as unknown as PDFRawStream) || null;
             }
         }
     }

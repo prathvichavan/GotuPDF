@@ -163,7 +163,7 @@ export default function ToolPage({
                     updateFieldAppearances: true,
                 });
 
-                const blob = new Blob([mergedPdfBytes], { type: "application/pdf" });
+                const blob = new Blob([mergedPdfBytes as BlobPart], { type: "application/pdf" });
                 const url = URL.createObjectURL(blob);
 
                 const filename = resolveDownloadFilename();

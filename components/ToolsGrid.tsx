@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { PDF_TOOLS, TOOL_CATEGORIES, type ToolCategory } from "@/lib/constants";
 
-const getToolIcon = (iconType: string) => {
-    const icons: Record<string, React.JSX.Element> = {
+// Memoize icon generation to prevent re-renders
+const ICON_MAP: Record<string, React.JSX.Element> = {
         merge: (
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -51,8 +51,10 @@ const getToolIcon = (iconType: string) => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
         ),
-    };
-    return icons[iconType] || icons.convert;
+};
+
+const getToolIcon = (iconType: string) => {
+    return ICON_MAP[iconType] || ICON_MAP.convert;
 };
 
 export default function ToolsGrid() {
@@ -89,12 +91,26 @@ export default function ToolsGrid() {
 
             {/* Tools Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                {filteredTools.map((tool) => (
+                {filteredTools.map((tool) => {
+                    const isUpcoming = tool.id === "pdf-to-word";
+                    return (
                     <Link
                         key={tool.id}
-                        href={tool.path}
-                        className="group relative glass-card rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1"
+                        href={isUpcoming ? "#" : tool.path}
+                        onClick={(e) => {
+                            if (isUpcoming) {
+                                e.preventDefault();
+                            }
+                        }}
+                        className={`group relative glass-card rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 ${!isUpcoming ? 'hover:-translate-y-1 cursor-pointer' : 'opacity-75 cursor-default'}`}
                     >
+                        {/* UPCOMING Badge */}
+                        {isUpcoming && (
+                            <div className="absolute top-3 right-3 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
+                                UPCOMING
+                            </div>
+                        )}
+
                         {/* Top accent line */}
                         <div
                             className="absolute top-0 left-4 right-4 h-[2px] rounded-b-full opacity-40 group-hover:opacity-80 transition-opacity"
@@ -120,13 +136,18 @@ export default function ToolsGrid() {
 
                         {/* CTA */}
                         <div className="flex items-center text-sm font-medium text-indigo-400 group-hover:text-indigo-300 transition-colors">
-                            <span className="group-hover:translate-x-1 transition-transform">Use Tool</span>
-                            <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                            </svg>
+                            <span className={`group-hover:translate-x-1 transition-transform ${isUpcoming ? 'text-amber-500' : ''}`}>
+                                {isUpcoming ? 'Coming Soon' : 'Use Tool'}
+                            </span>
+                            {!isUpcoming && (
+                                <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                </svg>
+                            )}
                         </div>
                     </Link>
-                ))}
+                    );
+                })}
             </div>
         </div>
     );

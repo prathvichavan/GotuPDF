@@ -203,7 +203,7 @@ function createPdfBuffer(options: {
         const contentWidth = getContentWidth();
         let image;
         try {
-            image = doc.openImage(buffer);
+            image = (doc as any).openImage(buffer);
         } catch {
             return;
         }
@@ -429,7 +429,7 @@ export async function POST(request: NextRequest) {
                 pythonSource: content,
             });
 
-            return new NextResponse(pdfBuffer, {
+            return new NextResponse(new Uint8Array(pdfBuffer), {
                 status: 200,
                 headers: {
                     "Content-Type": "application/pdf",
@@ -456,7 +456,7 @@ export async function POST(request: NextRequest) {
             notebook,
         });
 
-        return new NextResponse(pdfBuffer, {
+        return new NextResponse(new Uint8Array(pdfBuffer), {
             status: 200,
             headers: {
                 "Content-Type": "application/pdf",

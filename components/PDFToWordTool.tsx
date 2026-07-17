@@ -33,6 +33,9 @@ export default function PDFToWordTool() {
     const [downloadExtension, setDownloadExtension] = useState("");
     const [conversionInfo, setConversionInfo] = useState<ConversionInfo | null>(null);
 
+    // Tool is currently disabled as UPCOMING
+    const isUpcoming = true;
+
     const handleFilesSelected = (selectedFiles: File[]) => {
         if (downloadUrl) URL.revokeObjectURL(downloadUrl);
         setFiles(selectedFiles);
@@ -176,6 +179,30 @@ export default function PDFToWordTool() {
 
     return (
         <div className="max-w-4xl mx-auto px-4 py-12">
+            {/* UPCOMING Banner */}
+            {isUpcoming && (
+                <div className="mb-8 bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-400 dark:border-amber-500/50 rounded-2xl p-6">
+                    <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                            <svg className="w-8 h-8 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-lg font-bold text-amber-900 dark:text-amber-200 mb-1">
+                                🚀 UPCOMING FEATURE
+                            </h3>
+                            <p className="text-amber-800 dark:text-amber-300 mb-2">
+                                PDF to Word conversion is coming soon! We're building enterprise-grade support with full layout preservation and Microsoft Word COM engine integration.
+                            </p>
+                            <p className="text-sm text-amber-700 dark:text-amber-400">
+                                ✓ Advanced table preservation  •  ✓ Image optimization  •  ✓ Header/footer support  •  ✓ 99% visual fidelity
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div className="text-center mb-12">
                 <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
                     PDF to Word
@@ -185,7 +212,7 @@ export default function PDFToWordTool() {
                 </p>
             </div>
 
-            <div className="bg-gray-100 dark:bg-white/5 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-8 mb-8">
+            <div className={`bg-gray-100 dark:bg-white/5 rounded-2xl shadow-lg shadow-black/5 dark:shadow-black/20 p-8 mb-8 ${isUpcoming ? 'opacity-60 pointer-events-none' : ''}`}>
                 {/* Upload State */}
                 {!processing && !downloadUrl && (
                     <>

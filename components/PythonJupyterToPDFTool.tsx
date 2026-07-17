@@ -27,8 +27,9 @@ const highlightCode = (code: string, language: string) => {
 };
 
 const markdownRenderer = new marked.Renderer();
-markdownRenderer.code = (code, info) => {
- const language = (info || "").split(/\s+/)[0] || "python";
+markdownRenderer.code = ({ text, lang, escaped }: { text: string; lang?: string; escaped?: boolean }) => {
+  const code = text;
+ const language = (lang || "").split(/\s+/)[0] || "python";
  const highlighted = highlightCode(code, language);
  return `<pre class="jp-code jp-markdown-code"><code class="language-${language}">${highlighted}</code></pre>`;
 };
@@ -37,9 +38,7 @@ marked.use({
  renderer: markdownRenderer,
  gfm: true,
  breaks: false,
- headerIds: false,
- mangle: false,
-});
+} as any);
 
 const buildNotebookStyles = () => `
 @page { size: A4; margin: 16mm 14mm; }

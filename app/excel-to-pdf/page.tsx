@@ -3,20 +3,20 @@ import ExcelToPDFTool from "@/components/ExcelToPDFTool";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-    title: `Excel to PDF Converter Online Free | ${SITE_NAME}`,
-    description: "Convert Excel spreadsheets (.xls, .xlsx) to PDF online for free. Preserves tables, formatting, and data. No signup required.",
-    keywords: [ "excel to pdf", "xlsx to pdf", "xls to pdf converter", "spreadsheet to pdf", "convert excel to pdf online", "excel to pdf free", "xlsx to pdf converter", "excel file to pdf"
+    title: `Excel & CSV to PDF Converter Online Free | ${SITE_NAME}`,
+    description: "Convert Excel spreadsheets (.xls, .xlsx) and CSV files to PDF online for free. Preserves tables, formatting, and data. No signup required.",
+    keywords: [ "excel to pdf", "csv to pdf", "xlsx to pdf", "xls to pdf converter", "spreadsheet to pdf", "convert excel to pdf online", "excel to pdf free", "xlsx to pdf converter", "csv converter", "excel file to pdf"
     ],
     openGraph: {
-        title: "Excel to PDF Converter - Free Online Tool",
-        description: "Convert Excel spreadsheets to PDF instantly. Preserves tables and formatting.",
+        title: "Excel & CSV to PDF Converter - Free Online Tool",
+        description: "Convert Excel spreadsheets and CSV files to PDF instantly. Preserves tables and formatting.",
         url: `${SITE_URL}/excel-to-pdf`,
         type: "website",
     },
     twitter: {
         card: "summary_large_image",
-        title: "Excel to PDF Converter",
-        description: "Convert .xls and .xlsx files to PDF online for free.",
+        title: "Excel & CSV to PDF Converter",
+        description: "Convert .xls, .xlsx and .csv files to PDF online for free.",
     },
     alternates: {
         canonical: `${SITE_URL}/excel-to-pdf`
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 };
 
 export default function ExcelToPDFPage() {
-    const structuredData = { "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Excel to PDF Converter", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web Browser", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD"
-        }, "description": "Free online tool to convert Excel spreadsheets (.xls, .xlsx) to PDF format. Preserves tables, formatting, and data.", "featureList": [ "Convert Excel to PDF", "Support for .xls and .xlsx files", "Preserve table formatting", "Maintain cell alignment", "No registration required"
+    const structuredData = { "@context": "https://schema.org", "@type": "SoftwareApplication", "name": "Excel & CSV to PDF Converter", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Web Browser", "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD"
+        }, "description": "Free online tool to convert Excel spreadsheets (.xls, .xlsx) and CSV files to PDF format. Preserves tables, formatting, and data.", "featureList": [ "Convert Excel to PDF", "Convert CSV to PDF", "Support for .xls, .xlsx and .csv files", "Preserve table formatting", "Maintain cell alignment", "No registration required"
         ], "provider": { "@type": "Organization", "name": SITE_NAME, "url": SITE_URL
         }
     };
@@ -39,7 +39,7 @@ export default function ExcelToPDFPage() {
             },
             { "@type": "ListItem",
                 position: 2,
-                name: "Excel to PDF",
+                name: "Excel & CSV to PDF",
                 item: `${SITE_URL}/excel-to-pdf`,
             },
         ],

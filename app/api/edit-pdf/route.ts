@@ -168,7 +168,7 @@ export async function POST(request: NextRequest) {  return withUsageLimit(reques
     const normalizedExactEdits = exactCandidates.map(toExactEdit);
     const overlayEdits = edits.map(toOverlayEdit);
 
-    let editedBytes = new Uint8Array(pdfBuffer);
+    let editedBytes: Uint8Array = new Uint8Array(pdfBuffer);
     let resultMode: "exact" | "overlay" | "mixed" = "exact";
     let warning: string | undefined;
 
@@ -492,7 +492,7 @@ async function getOverlayFont(
   if (isMono) {
     fontKey = isBold && isItalic ? StandardFonts.CourierBoldOblique : isBold ? StandardFonts.CourierBold : isItalic ? StandardFonts.CourierOblique : StandardFonts.Courier;
   } else if (isSerif) {
-    fontKey = isBold && isItalic ? StandardFonts.TimesBoldItalic : isBold ? StandardFonts.TimesBold : isItalic ? StandardFonts.TimesItalic : StandardFonts.TimesRoman;
+    fontKey = isBold && isItalic ? StandardFonts.TimesRomanBoldItalic : isBold ? StandardFonts.TimesRomanBold : isItalic ? StandardFonts.TimesRomanItalic : StandardFonts.TimesRoman;
   } else {
     fontKey = isBold && isItalic ? StandardFonts.HelveticaBoldOblique : isBold ? StandardFonts.HelveticaBold : isItalic ? StandardFonts.HelveticaOblique : StandardFonts.Helvetica;
   }

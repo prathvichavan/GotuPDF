@@ -21,7 +21,6 @@ async function extractPDFContent(pdfBuffer: ArrayBuffer) {
   const data = new Uint8Array(pdfBuffer);
   const pdf = await pdfjsLib.getDocument({
     data,
-    disableWorker: typeof window === 'undefined',
   }).promise;
   const pages: any[] = [];
 
@@ -233,7 +232,6 @@ export async function convertPDFToExcelAdvanced(
     const data = new Uint8Array(pdfBuffer);
     const pdf = await pdfjsLib.getDocument({
       data,
-      disableWorker: typeof window === 'undefined',
     }).promise;
     const allTables: any[] = [];
     let totalPages = 0;

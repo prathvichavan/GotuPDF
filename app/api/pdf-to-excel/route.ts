@@ -122,7 +122,7 @@ async function extractTablesFromPDF(pdfBuffer: Buffer): Promise<{
     pagesProcessed: number;
 }> {
     const data = new Uint8Array(pdfBuffer);
-        const pdf = await pdfjsLib.getDocument({ data, disableWorker: true }).promise;
+        const pdf = await pdfjsLib.getDocument({ data }).promise;
     const tables: Array<{ data: string[][] }> = [];
     let pagesProcessed = 0;
 

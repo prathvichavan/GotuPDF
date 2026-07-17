@@ -21,11 +21,16 @@ export async function POST(request: NextRequest) {
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', // .xlsx
             'application/vnd.ms-excel', // .xls
             'application/vnd.ms-excel.sheet.macroEnabled.12', // .xlsm
+            'text/csv', // .csv
+            'application/csv', // .csv (alternative mime type)
         ];
 
-        if (!allowedTypes.includes(file.type) && !file.name.match(/\.(xlsx|xls|xlsm)$/i)) {
+        const isValidExtension = file.name.match(/\.(xlsx|xls|xlsm|csv)$/i);
+        const isValidMimeType = allowedTypes.includes(file.type);
+
+        if (!isValidMimeType && !isValidExtension) {
             return NextResponse.json(
-                { error: "Please upload a valid Excel file (.xls or .xlsx)" },
+                { error: "Please upload a valid Excel file (.xls, .xlsx) or CSV file (.csv)" },
                 { status: 400 }
             );
         }
@@ -33,16 +38,22 @@ export async function POST(request: NextRequest) {
         // Read file content
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
+        let fileContent: string | Buffer = buffer;
 
-        // Parse Excel file
-        const workbook = XLSX.read(buffer, { type: 'buffer' });
+        // For CSV files, read as text with UTF-8 encoding to handle special characters
+        if (file.name.toLowerCase().endsWith('.csv')) {
+            fileContent = new TextDecoder('utf-8').decode(arrayBuffer);
+        }
+
+        // Parse Excel/CSV file
+        const workbook = XLSX.read(fileContent, { type: file.name.toLowerCase().endsWith('.csv') ? 'string' : 'buffer' });
         const sheetNames = workbook.SheetNames;
 
         if (sheetNames.length === 0) {
-            throw new Error("No worksheets found in the Excel file");
+            throw new Error("No worksheets or data found in the file");
         }
 
-        // Create PDF from Excel data
+        // Create PDF from Excel/CSV data
         const pdfBuffer = await createPDFFromExcel(workbook, getFileNameWithoutExtension(file.name));
 
         // Validate the output
@@ -72,13 +83,38 @@ export async function POST(request: NextRequest) {
             return response;
 
         } catch (error) {
-            console.error("Error converting Excel to PDF:", error);
+            console.error("Error converting file to PDF:", error);
             return NextResponse.json(
-                { error: `Failed to convert Excel to PDF: ${error instanceof Error ? error.message : 'Unknown error'}` },
+                { error: `Failed to convert file to PDF: ${error instanceof Error ? error.message : 'Unknown error'}` },
                 { status: 500 }
             );
         }
     });
+}
+
+/**
+ * Sanitize text to handle Unicode characters that WinAnsi font doesn't support
+ */
+function sanitizeTextForPDF(text: string): string {
+    if (!text) return text;
+    
+    // Replace common special currency symbols
+    let sanitized = text
+        .replace(/₹/g, 'Rs.') // Indian Rupee
+        .replace(/€/g, 'EUR ') // Euro
+        .replace(/¥/g, 'JPY ') // Yen
+        .replace(/£/g, 'GBP ') // Pound
+        .replace(/¢/g, 'c') // Cent
+        .replace(/₱/g, 'PHP ') // Philippine Peso
+        .replace(/₦/g, 'NGN ') // Nigerian Naira
+        .replace(/₨/g, 'Rs.') // Generic Rupee
+        .replace(/₩/g, 'KRW ') // Won
+        .replace(/₪/g, 'ILS ') // Shekel
+        .replace(/₫/g, 'VND ') // Vietnamese Dong
+        .replace(/₱/g, 'P') // Peso
+        .replace(/[^\x20-\x7E]/g, '?'); // Replace other non-ASCII chars with ?
+    
+    return sanitized;
 }
 
 /**
@@ -110,7 +146,7 @@ async function createPDFFromExcel(workbook: XLSX.WorkBook, title: string): Promi
         }
 
         // Sheet title
-        page.drawText(`${sheetName}`, {
+        page.drawText(sanitizeTextForPDF(`${sheetName}`), {
             x: margin,
             y: yPosition,
             size: 16,
@@ -127,7 +163,7 @@ async function createPDFFromExcel(workbook: XLSX.WorkBook, title: string): Promi
         }) as any[][];
 
         if (jsonData.length === 0) {
-            page.drawText('(Empty sheet)', {
+            page.drawText(sanitizeTextForPDF('(Empty sheet)'), {
                 x: margin,
                 y: yPosition,
                 size: 12,
@@ -155,7 +191,7 @@ async function createPDFFromExcel(workbook: XLSX.WorkBook, title: string): Promi
                 yPosition = pageHeight - margin;
 
                 // Add continuation header
-                page.drawText(`${sheetName} (continued)`, {
+                page.drawText(sanitizeTextForPDF(`${sheetName} (continued)`), {
                     x: margin,
                     y: yPosition,
                     size: 14,
@@ -168,9 +204,10 @@ async function createPDFFromExcel(workbook: XLSX.WorkBook, title: string): Promi
             // Draw row - each cell in its own column
             for (let colIndex = 0; colIndex < maxCols; colIndex++) {
                 const cellValue = row[colIndex] !== undefined ? String(row[colIndex]) : '';
-                // Truncate based on column width
+                // Sanitize and truncate based on column width
+                const sanitized = sanitizeTextForPDF(cellValue);
                 const maxChars = Math.floor(colWidth / 4);
-                const truncated = cellValue.length > maxChars ? cellValue.substring(0, maxChars - 3) + '...' : cellValue;
+                const truncated = sanitized.length > maxChars ? sanitized.substring(0, maxChars - 3) + '...' : sanitized;
 
                 const x = margin + (colIndex * colWidth);
                 const font = rowIndex === 0 ? helveticaBold : helvetica;

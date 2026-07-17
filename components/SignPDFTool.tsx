@@ -192,7 +192,13 @@ export default function SignPDFTool() {
         if (!file || !signatureDataUrl) return;
         setIsProcessing(true); setProgress(10); setError(null);
         try {
-            const res = await fetch(signatureDataUrl); const sigBlob = await res.blob();
+            // Convert data URL to blob
+            const [header, data] = signatureDataUrl.split(",");
+            const bstr = atob(data);
+            const n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            for (let i = 0; i < n; i++) u8arr[i] = bstr.charCodeAt(i);
+            const sigBlob = new Blob([u8arr], { type: "image/png" });
             const sigFile = new File([sigBlob], "signature.png", { type: "image/png" });
             const formData = new FormData();
             formData.append("file0", file);

@@ -16,11 +16,11 @@ export default function ExcelToPDFTool() {
 
  const validateAndSetFile = (selectedFile: File) => {
  // Validate file type
- const validExtensions = ['.xls', '.xlsx'];
+ const validExtensions = ['.xls', '.xlsx', '.csv'];
  const fileExtension = selectedFile.name.substring(selectedFile.name.lastIndexOf('.')).toLowerCase();
 
  if (!validExtensions.includes(fileExtension)) {
- setError('Please upload an Excel file (.xls or .xlsx)');
+ setError('Please upload an Excel file (.xls, .xlsx) or CSV file (.csv)');
  return;
  }
 
@@ -137,10 +137,10 @@ export default function ExcelToPDFTool() {
  {/* Header */}
  <div className="text-center mb-12">
  <h1 className="text-5xl font-bold bg-gradient-to-r from-indigo-500 to-indigo-600 bg-clip-text text-transparent mb-4">
- 📄 Excel to PDF Converter
+ 📄 Excel & CSV to PDF Converter
  </h1>
  <p className="text-gray-500 dark:text-slate-400 text-lg">
- Convert Excel spreadsheets to PDF while preserving tables, formatting, and data structure.
+ Convert Excel spreadsheets and CSV files to PDF while preserving tables, formatting, and data structure.
  </p>
  </div>
 
@@ -149,11 +149,11 @@ export default function ExcelToPDFTool() {
  <div className="bg-gray-100 dark:bg-white/5 rounded-2xl shadow-xl shadow-black/10 dark:shadow-black/30 p-8 mb-8">
  <DragDropUpload
  onFileSelect={handleFileSelect}
- accept=".xls,.xlsx"
+ accept=".xls,.xlsx,.csv"
  multiple={false}
  maxSize={25}
  icon="📊"
- title="Click to select an Excel file"
+ title="Click to select an Excel or CSV file"
  subtitle="or drag and drop here"
  borderColor="border-blue-300"
  hoverColor="border-blue-500 bg-indigo-500/100/10"
@@ -167,7 +167,7 @@ export default function ExcelToPDFTool() {
  📖 How to use:
  </h3>
  <ol className="space-y-2 text-indigo-300">
- <li>1. Upload an Excel file (.xls or .xlsx)</li>
+ <li>1. Upload an Excel file (.xls, .xlsx) or CSV file</li>
  <li>2. Click "Convert to PDF"</li>
  <li>3. Download your converted PDF</li>
  </ol>
