@@ -2,47 +2,52 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
-// Routes that require authentication
+// Protected routes
 const protectedRoutes = ["/dashboard"];
 
-// Routes that should redirect to dashboard if authenticated
+// Auth routes
 const authRoutes = ["/login", "/signup"];
 
 export async function middleware(request: NextRequest) {
-    const token = await getToken({
-        req: request,
-        secret: process.env.NEXTAUTH_SECRET,
-    });
+  const token = await getToken({
+    req: request,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
 
-    const { pathname } = request.nextUrl;
+  console.log("========== MIDDLEWARE ==========");
+  console.log("Path:", request.nextUrl.pathname);
+  console.log("Token:", token);
+  console.log("================================");
 
-    // Check if the path is a protected route
-    const isProtectedRoute = protectedRoutes.some((route) =>
-        pathname.startsWith(route)
-    );
+  const { pathname } = request.nextUrl;
 
-    // Check if the path is an auth route (login/signup)
-    const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
-    // Redirect to login if accessing protected route without authentication
-    if (isProtectedRoute && !token) {
-        const loginUrl = new URL("/login", request.url);
-        loginUrl.searchParams.set("callbackUrl", pathname);
-        return NextResponse.redirect(loginUrl);
-    }
+  const isAuthRoute = authRoutes.some((route) =>
+    pathname.startsWith(route)
+  );
 
-    // Redirect to dashboard if accessing auth routes while authenticated
-    if (isAuthRoute && token) {
-        return NextResponse.redirect(new URL("/dashboard", request.url));
-    }
+  // If user is NOT logged in and accessing dashboard
+  if (isProtectedRoute && !token) {
+    console.log("Redirecting to login...");
 
-    return NextResponse.next();
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+
+    return NextResponse.redirect(loginUrl);
+  }
+
+  // If user IS logged in and opens login/signup
+  if (isAuthRoute && token) {
+    console.log("Already logged in. Redirecting to dashboard...");
+    return NextResponse.redirect(new URL("/dashboard", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
-    matcher: [
-        "/dashboard/:path*",
-        "/login",
-        "/signup",
-    ],
+  matcher: ["/dashboard/:path*", "/login", "/signup"],
 };
