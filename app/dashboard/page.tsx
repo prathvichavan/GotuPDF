@@ -1,11 +1,20 @@
 "use client";
 
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
 export default function DashboardPage() {
+    const router = useRouter();
     const { data: session, status } = useSession();
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.replace("/login");
+        }
+    }, [status, router]);
 
     if (status === "loading") {
         return (
@@ -15,13 +24,18 @@ export default function DashboardPage() {
         );
     }
 
+    if (!session) {
+        return null;
+    }
+
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-[#0d1117] py-12 px-4">
             <div className="max-w-4xl mx-auto">
+
                 {/* Welcome Card */}
                 <div className="bg-white dark:bg-[#161b22] rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 p-8 mb-8">
                     <div className="flex items-center gap-6">
-                        {session?.user?.image ? (
+                        {session.user?.image ? (
                             <Image
                                 src={session.user.image}
                                 alt={session.user.name || "User"}
@@ -31,24 +45,29 @@ export default function DashboardPage() {
                             />
                         ) : (
                             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white text-3xl font-bold">
-                                {session?.user?.name?.charAt(0).toUpperCase() || "U"}
+                                {session.user?.name?.charAt(0).toUpperCase() || "U"}
                             </div>
                         )}
+
                         <div>
                             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Welcome back, {session?.user?.name?.split(" ")[0] || "User"}!
+                                Welcome back, {session.user?.name?.split(" ")[0] || "User"}!
                             </h1>
+
                             <p className="text-gray-500 dark:text-slate-400 mt-1">
-                                {session?.user?.email}
+                                {session.user?.email}
                             </p>
                         </div>
                     </div>
                 </div>
 
                 {/* Quick Actions */}
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Quick Actions</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    Quick Actions
+                </h2>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-                    <QuickActionCard
+                                        <QuickActionCard
                         title="Merge PDF"
                         description="Combine multiple PDFs into one"
                         href="/merge-pdf"
@@ -59,6 +78,7 @@ export default function DashboardPage() {
                         }
                         color="bg-blue-500"
                     />
+
                     <QuickActionCard
                         title="Compress PDF"
                         description="Reduce PDF file size"
@@ -70,6 +90,7 @@ export default function DashboardPage() {
                         }
                         color="bg-red-500"
                     />
+
                     <QuickActionCard
                         title="PDF to Word"
                         description="Convert PDF to editable Word"
@@ -81,6 +102,7 @@ export default function DashboardPage() {
                         }
                         color="bg-indigo-500"
                     />
+
                     <QuickActionCard
                         title="Split PDF"
                         description="Extract pages from PDF"
@@ -92,6 +114,7 @@ export default function DashboardPage() {
                         }
                         color="bg-purple-500"
                     />
+
                     <QuickActionCard
                         title="Protect PDF"
                         description="Add password protection"
@@ -103,6 +126,7 @@ export default function DashboardPage() {
                         }
                         color="bg-emerald-500"
                     />
+
                     <QuickActionCard
                         title="All Tools"
                         description="Browse all PDF tools"
@@ -116,31 +140,49 @@ export default function DashboardPage() {
                     />
                 </div>
 
-                {/* Account Info */}
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">Account Details</h2>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+                    Account Details
+                </h2>
+
                 <div className="bg-white dark:bg-[#161b22] rounded-2xl shadow-lg border border-gray-200 dark:border-white/10 p-6">
                     <div className="space-y-4">
+
                         <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5">
-                            <span className="text-gray-500 dark:text-slate-400">Name</span>
-                            <span className="text-gray-900 dark:text-white font-medium">{session?.user?.name || "Not set"}</span>
+                            <span className="text-gray-500 dark:text-slate-400">
+                                Name
+                            </span>
+
+                            <span className="text-gray-900 dark:text-white font-medium">
+                                {session.user?.name || "Not set"}
+                            </span>
                         </div>
+
                         <div className="flex justify-between items-center py-3 border-b border-gray-100 dark:border-white/5">
-                            <span className="text-gray-500 dark:text-slate-400">Email</span>
-                            <span className="text-gray-900 dark:text-white font-medium">{session?.user?.email || "Not set"}</span>
+                            <span className="text-gray-500 dark:text-slate-400">
+                                Email
+                            </span>
+
+                            <span className="text-gray-900 dark:text-white font-medium">
+                                {session.user?.email || "Not set"}
+                            </span>
                         </div>
+
                         <div className="flex justify-between items-center py-3">
-                            <span className="text-gray-500 dark:text-slate-400">Plan</span>
+                            <span className="text-gray-500 dark:text-slate-400">
+                                Plan
+                            </span>
+
                             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-emerald-100 dark:bg-emerald-500/20 text-emerald-700 dark:text-emerald-400">
                                 Free
                             </span>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
     );
 }
-
 function QuickActionCard({
     title,
     description,
@@ -159,11 +201,19 @@ function QuickActionCard({
             href={href}
             className="block bg-white dark:bg-[#161b22] rounded-xl shadow border border-gray-200 dark:border-white/10 p-5 hover:shadow-lg hover:border-gray-300 dark:hover:border-white/20 transition-all group"
         >
-            <div className={`w-12 h-12 ${color} rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}>
+            <div
+                className={`w-12 h-12 ${color} rounded-xl flex items-center justify-center text-white mb-4 group-hover:scale-110 transition-transform`}
+            >
                 {icon}
             </div>
-            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">{title}</h3>
-            <p className="text-sm text-gray-500 dark:text-slate-400">{description}</p>
+
+            <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                {title}
+            </h3>
+
+            <p className="text-sm text-gray-500 dark:text-slate-400">
+                {description}
+            </p>
         </Link>
     );
 }
