@@ -1,9 +1,9 @@
 import NextAuth from "next-auth";
 import { authOptions } from "@/lib/authOptions";
 
-console.log("NEXTAUTH_SECRET:", process.env.NEXTAUTH_SECRET);
-console.log("NEXTAUTH_URL:", process.env.NEXTAUTH_URL);
-
-const handler = NextAuth(authOptions);
+const handler = NextAuth({
+  ...authOptions,
+  secret: "test-secret-123456789012345678901234567890",
+});
 
 export { handler as GET, handler as POST };
