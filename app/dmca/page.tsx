@@ -46,7 +46,7 @@ export default function DMCAPage() {
                         Please send all DMCA notices to our designated Copyright Agent at:
                     </p>
                     <p>
-                        <strong>Email:</strong> krishanmohankumar9311@gmail.com<br />
+                        <strong>Email:</strong> mr.prathvirajchavan@gmail.com<br />
                         <strong>Subject:</strong> DMCA Takedown Request
                     </p>
                 </div>

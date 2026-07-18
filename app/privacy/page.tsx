@@ -30,7 +30,7 @@ export default function PrivacyPage() {
                 <div className="prose prose-lg max-w-none">
                     <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-6">
                         This Privacy Policy applies to the website <strong>{SITE_URL}</strong>, operated by{' '}
-                        <strong>GotuPDF Digital Services, India</strong>.
+                        <strong>GotuPDF</strong>.
                     </p>
                     <p className="text-gray-600 dark:text-slate-300 leading-relaxed mb-8">
                         We respect your privacy and are committed to protecting personally identifiable information you may
@@ -64,8 +64,7 @@ export default function PrivacyPage() {
                         </p>
                         <ul className="list-disc pl-6 text-gray-600 dark:text-slate-300 space-y-2 mb-4">
                             <li><strong>Processing:</strong> Uploaded PDF files are processed only for the requested operation.</li>
-                            <li><strong>Storage:</strong> Files are stored temporarily to allow you to download the processed result.</li>
-                            <li><strong>Deletion:</strong> All uploaded and processed files are automatically and permanently deleted within <strong>1 hour</strong>.</li>
+                            <li><strong>Storage:</strong> Files are processed only for the requested operation. We do not permanently store uploaded files. Files are removed immediately after processing or after the requested operation is completed.</li>
                             <li><strong>Encryption:</strong> Files are transferred using SSL/TLS encryption.</li>
                             <li><strong>Privacy:</strong> We do not read, analyze, or access the content of your files.</li>
                         </ul>

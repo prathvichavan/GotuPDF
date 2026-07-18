@@ -18,7 +18,7 @@ export default function SecurityPolicyPage() {
                         At {SITE_NAME}, we understand that security is critical when handling your PDF documents. We have built our architecture with security as a top priority.
                     </p>
 
-                    <h3>1. Data Transmission Encyrption</h3>
+                    <h3>1. Data Transmission Encryption</h3>
                     <p>
                         All communication between your device and our servers is encrypted using 256-bit SSL (Secure Socket Layer) encryption. This is the same standard used by banks and e-commerce websites. This typically ensures that data cannot be intercepted or read by third parties during transmission.
                     </p>
