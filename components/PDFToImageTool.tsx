@@ -7,7 +7,7 @@ import { sanitizeFileNamePart, splitFileName } from "@/lib/fileName";
 
 // Set worker path
 if (typeof window !== 'undefined') {
- pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 }
 
 type OutputFormat = "jpg" | "png";

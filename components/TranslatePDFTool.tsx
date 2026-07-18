@@ -9,7 +9,7 @@ import { splitFileName, buildDownloadName } from "@/lib/fileName";
 /*  pdf.js worker (CDN, same version as the installed package)        */
 /* ------------------------------------------------------------------ */
 if (typeof window !== "undefined") {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 }
 
 /* ------------------------------------------------------------------ */

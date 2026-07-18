@@ -10,7 +10,7 @@ type Status = "idle" | "uploading" | "reordering" | "success" | "error";
 const MAX_FILE_SIZE_MB = 50;
 
 if (typeof window !== "undefined") {
- pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 }
 
 interface PagePreview {

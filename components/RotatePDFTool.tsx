@@ -12,7 +12,7 @@ const MAX_FILE_SIZE_MB = 50;
 const MAX_PREVIEW_PAGES = 24;
 
 if (typeof window !== "undefined") {
- pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+ pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
 }
 
 function parseFileNameFromDisposition(disposition: string | null) {

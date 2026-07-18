@@ -78,7 +78,7 @@ export default function SignPDFTool() {
             try {
                 const pdfjsLib = await import("pdfjs-dist");
                 if (typeof window !== "undefined") {
-                    pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.js';
                 }
                 const ab = await file.arrayBuffer();
                 const doc = await pdfjsLib.getDocument({ data: new Uint8Array(ab) }).promise;
