@@ -92,22 +92,26 @@ export default function ToolsGrid() {
             {/* Tools Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {filteredTools.map((tool) => {
-                    const isUpcoming = tool.id === "pdf-to-word";
+                    const isComingSoon = tool.id === "word-to-pdf";
+                    const isMaintenance = tool.id === "protect-pdf";
+                    const isDisabled = isComingSoon || isMaintenance;
+                    const badgeLabel = isComingSoon ? "COMING SOON" : isMaintenance ? "UNDER MAINTENANCE" : "";
                     return (
                     <Link
                         key={tool.id}
-                        href={isUpcoming ? "#" : tool.path}
+                        href={isDisabled ? "#" : tool.path}
                         onClick={(e) => {
-                            if (isUpcoming) {
+                            if (isDisabled) {
                                 e.preventDefault();
                             }
                         }}
-                        className={`group relative glass-card rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 ${!isUpcoming ? 'hover:-translate-y-1 cursor-pointer' : 'opacity-75 cursor-default'}`}
+                        aria-disabled={isDisabled}
+                        className={`group relative glass-card rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 ${!isDisabled ? 'hover:-translate-y-1 cursor-pointer' : 'opacity-75 cursor-default'}`}
                     >
-                        {/* UPCOMING Badge */}
-                        {isUpcoming && (
-                            <div className="absolute top-3 right-3 bg-amber-500 text-white text-xs font-bold px-2.5 py-1 rounded-full">
-                                UPCOMING
+                        {/* Status Badge */}
+                        {isDisabled && (
+                            <div className={`absolute top-3 right-3 text-white text-xs font-bold px-2.5 py-1 rounded-full ${isComingSoon ? "bg-amber-500" : "bg-rose-500"}`}>
+                                {badgeLabel}
                             </div>
                         )}
 
@@ -136,10 +140,10 @@ export default function ToolsGrid() {
 
                         {/* CTA */}
                         <div className="flex items-center text-sm font-medium text-indigo-400 group-hover:text-indigo-300 transition-colors">
-                            <span className={`group-hover:translate-x-1 transition-transform ${isUpcoming ? 'text-amber-500' : ''}`}>
-                                {isUpcoming ? 'Coming Soon' : 'Use Tool'}
+                            <span className={`group-hover:translate-x-1 transition-transform ${isDisabled ? 'text-amber-500' : ''}`}>
+                                {isComingSoon ? 'Coming Soon' : isMaintenance ? 'Under Maintenance' : 'Use Tool'}
                             </span>
-                            {!isUpcoming && (
+                            {!isDisabled && (
                                 <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                                 </svg>

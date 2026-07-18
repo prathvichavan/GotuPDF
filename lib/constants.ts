@@ -74,7 +74,7 @@ export const PDF_TOOLS = [
     },
     {
         id: "word-to-pdf",
-        name: "Word to PDF",
+        name: "Word to PDF (Coming Soon)",
         description: "Convert Word documents to PDF format",
         icon: "convert",
         path: "/word-to-pdf",
@@ -146,7 +146,7 @@ export const PDF_TOOLS = [
     },
     {
         id: "protect-pdf",
-        name: "Protect PDF",
+        name: "Protect PDF (Under Maintenance)",
         description: "Add password protection to your PDF",
         icon: "lock",
         path: "/protect-pdf",

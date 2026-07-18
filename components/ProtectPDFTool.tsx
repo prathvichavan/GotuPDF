@@ -25,6 +25,36 @@ export default function ProtectPDFTool() {
  const [downloadName, setDownloadName] = useState("");
  const [downloadBaseName, setDownloadBaseName] = useState("");
  const [downloadExtension, setDownloadExtension] = useState("");
+ const isUnderMaintenance = true;
+
+ if (isUnderMaintenance) {
+ return (
+ <div className="min-h-screen bg-gradient-to-br p-8">
+ <div className="max-w-4xl mx-auto">
+ <div className="text-center mb-12">
+ <h1 className="text-5xl font-bold bg-gradient-to-r from-red-600 to-pink-600 bg-clip-text text-transparent mb-4">
+ 🔒 Protect PDF
+ </h1>
+ <p className="text-gray-500 dark:text-slate-400 text-lg">
+ This feature is temporarily under maintenance.
+ </p>
+ </div>
+
+ <div className="bg-rose-50 dark:bg-rose-500/10 rounded-2xl border-2 border-rose-300 dark:border-rose-500/40 p-8 shadow-xl shadow-black/10">
+ <div className="flex items-start gap-4">
+ <div className="text-rose-500 text-3xl leading-none">🛠️</div>
+ <div>
+ <h2 className="text-2xl font-bold text-rose-900 dark:text-rose-200 mb-2">Under Maintenance</h2>
+ <p className="text-rose-800 dark:text-rose-300">
+ Password protection is being updated and is currently unavailable. Please check back later.
+ </p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ );
+ }
 
  const handleFileSelect = (selectedFiles: File[]) => {
  const selectedFile = selectedFiles[0];

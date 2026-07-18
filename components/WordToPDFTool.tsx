@@ -43,6 +43,7 @@ export default function WordToPDFTool() {
     const [downloadExtension, setDownloadExtension] = useState("");
     const [conversionInfo, setConversionInfo] = useState<ConversionInfo | null>(null);
     const xhrRef = useRef<XMLHttpRequest | null>(null);
+    const isComingSoon = true;
 
     useEffect(() => {
         return () => {
@@ -52,6 +53,31 @@ export default function WordToPDFTool() {
             xhrRef.current?.abort();
         };
     }, [downloadUrl]);
+
+    if (isComingSoon) {
+        return (
+            <div className="max-w-4xl mx-auto px-4 py-12">
+                <div className="text-center mb-12">
+                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">Word to PDF</h1>
+                    <p className="text-xl text-gray-500 dark:text-slate-400">
+                        This feature is coming soon and is temporarily unavailable.
+                    </p>
+                </div>
+
+                <div className="bg-amber-50 dark:bg-amber-500/10 border-2 border-amber-300 dark:border-amber-500/40 rounded-2xl p-8 shadow-lg shadow-black/5 dark:shadow-black/20">
+                    <div className="flex items-start gap-4">
+                        <div className="text-amber-500 text-3xl leading-none">🚧</div>
+                        <div>
+                            <h2 className="text-2xl font-bold text-amber-900 dark:text-amber-200 mb-2">Coming Soon</h2>
+                            <p className="text-amber-800 dark:text-amber-300">
+                                Word to PDF is under development. We are preparing the conversion flow and will enable it in a future release.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     const handleFilesSelected = (selectedFiles: File[]) => {
         if (downloadUrl) URL.revokeObjectURL(downloadUrl);
@@ -78,6 +104,7 @@ export default function WordToPDFTool() {
     };
 
     const handleProcess = async () => {
+        
         if (files.length === 0) {
             setMessage("Please select a file first");
             return;
