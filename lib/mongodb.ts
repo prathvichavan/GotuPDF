@@ -14,7 +14,7 @@ if (!MONGODB_URI) {
 interface MongooseCache {
     conn: typeof mongoose | null;
     promise: Promise<typeof mongoose> | null;
-}6
+}
 
 declare global {
     // eslint-disable-next-line no-var
