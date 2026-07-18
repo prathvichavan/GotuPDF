@@ -1,6 +1,6 @@
 export const SITE_NAME = "GotuPDF";
 export const AUTHOR_NAME = "GotuPDF Team";
-export const CONTACT_EMAIL = "krishanmohankumar9311@gmail.com";
+export const CONTACT_EMAIL = "mr.prathvirajchavan@gmail.com";
 export const SITE_DESCRIPTION = "Professional PDF Tools - Convert, Merge, Split, Compress PDFs Online for Free";
 export const SITE_URL = "https://gotupdf.vercel.app";
 export const SITE_KEYWORDS = "pdf tools, convert pdf, merge pdf, split pdf, compress pdf, pdf to word, word to pdf, pdf converter";
@@ -26,6 +26,18 @@ export const ALLOWED_FILE_TYPES = {
 };
 
 export type ToolCategory = "all" | "convert" | "edit" | "security" | "optimize";
+export type ToolStatus = "active" | "upcoming";
+
+export interface PdfTool {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    path: string;
+    color: string;
+    category: ToolCategory;
+    status: ToolStatus;
+}
 
 export const TOOL_CATEGORIES: { id: ToolCategory; label: string }[] = [
     { id: "all", label: "All" },
@@ -35,7 +47,7 @@ export const TOOL_CATEGORIES: { id: ToolCategory; label: string }[] = [
     { id: "optimize", label: "Optimize" },
 ];
 
-export const PDF_TOOLS = [
+export const ALL_PDF_TOOLS: PdfTool[] = [
     {
         id: "merge-pdf",
         name: "Merge PDF",
@@ -44,6 +56,7 @@ export const PDF_TOOLS = [
         path: "/merge-pdf",
         color: "#2563EB",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "split-pdf",
@@ -53,6 +66,7 @@ export const PDF_TOOLS = [
         path: "/split-pdf",
         color: "#7C3AED",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "compress-pdf",
@@ -62,6 +76,7 @@ export const PDF_TOOLS = [
         path: "/compress-pdf",
         color: "#DC2626",
         category: "optimize" as ToolCategory,
+        status: "active",
     },
     {
         id: "pdf-to-word",
@@ -71,15 +86,7 @@ export const PDF_TOOLS = [
         path: "/pdf-to-word",
         color: "#2563EB",
         category: "convert" as ToolCategory,
-    },
-    {
-        id: "word-to-pdf",
-        name: "Word to PDF (Coming Soon)",
-        description: "Convert Word documents to PDF format",
-        icon: "convert",
-        path: "/word-to-pdf",
-        color: "#059669",
-        category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "pdf-to-jpg",
@@ -89,6 +96,7 @@ export const PDF_TOOLS = [
         path: "/pdf-to-jpg",
         color: "#cc7648ff",
         category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "jpg-to-pdf",
@@ -98,6 +106,7 @@ export const PDF_TOOLS = [
         path: "/jpg-to-pdf",
         color: "#0891B2",
         category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "pdf-to-png",
@@ -107,6 +116,7 @@ export const PDF_TOOLS = [
         path: "/pdf-to-png",
         color: "#7C3AED",
         category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "png-to-pdf",
@@ -116,15 +126,7 @@ export const PDF_TOOLS = [
         path: "/png-to-pdf",
         color: "#DB2777",
         category: "convert" as ToolCategory,
-    },
-    {
-        id: "pdf-to-excel",
-        name: "PDF to Excel",
-        description: "Convert PDF tables to Excel spreadsheets",
-        icon: "convert",
-        path: "/pdf-to-excel",
-        color: "#059669",
-        category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "excel-to-pdf",
@@ -134,6 +136,7 @@ export const PDF_TOOLS = [
         path: "/excel-to-pdf",
         color: "#DC2626",
         category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "pdf-to-ppt",
@@ -143,6 +146,7 @@ export const PDF_TOOLS = [
         path: "/pdf-to-ppt",
         color: "#EA580C",
         category: "convert" as ToolCategory,
+        status: "upcoming",
     },
     {
         id: "protect-pdf",
@@ -152,6 +156,7 @@ export const PDF_TOOLS = [
         path: "/protect-pdf",
         color: "#DC2626",
         category: "security" as ToolCategory,
+        status: "upcoming",
     },
     {
         id: "unlock-pdf",
@@ -161,33 +166,7 @@ export const PDF_TOOLS = [
         path: "/unlock-pdf",
         color: "#059669",
         category: "security" as ToolCategory,
-    },
-    {
-        id: "rotate-pdf",
-        name: "Rotate PDF",
-        description: "Rotate pages in your PDF document",
-        icon: "rotate",
-        path: "/rotate-pdf",
-        color: "#7C3AED",
-        category: "edit" as ToolCategory,
-    },
-    {
-        id: "reorder-pdf",
-        name: "Reorder PDF",
-        description: "Change the order of pages in your PDF",
-        icon: "reorder",
-        path: "/reorder-pdf",
-        color: "#F59E0B",
-        category: "edit" as ToolCategory,
-    },
-    {
-        id: "edit-pdf",
-        name: "Edit PDF",
-        description: "Edit text in PDF while preserving fonts and layout",
-        icon: "edit",
-        path: "/edit-pdf",
-        color: "#10B981",
-        category: "edit" as ToolCategory,
+        status: "upcoming",
     },
     {
         id: "python-jupyter-to-pdf",
@@ -197,6 +176,7 @@ export const PDF_TOOLS = [
         path: "/convert-python-jupyter-to-pdf",
         color: "#8B5CF6",
         category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "remove-pages",
@@ -206,6 +186,7 @@ export const PDF_TOOLS = [
         path: "/remove-pages",
         color: "#EF4444",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "extract-pages",
@@ -215,6 +196,7 @@ export const PDF_TOOLS = [
         path: "/extract-pages",
         color: "#3B82F6",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "repair-pdf",
@@ -224,15 +206,7 @@ export const PDF_TOOLS = [
         path: "/repair-pdf",
         color: "#10B981",
         category: "optimize" as ToolCategory,
-    },
-    {
-        id: "ocr-pdf",
-        name: "OCR PDF",
-        description: "Extract text from scanned PDFs using OCR",
-        icon: "convert",
-        path: "/ocr-pdf",
-        color: "#6366F1",
-        category: "optimize" as ToolCategory,
+        status: "active",
     },
     {
         id: "html-to-pdf",
@@ -242,6 +216,7 @@ export const PDF_TOOLS = [
         path: "/html-to-pdf",
         color: "#F97316",
         category: "convert" as ToolCategory,
+        status: "active",
     },
     {
         id: "add-page-numbers",
@@ -251,6 +226,7 @@ export const PDF_TOOLS = [
         path: "/add-page-numbers",
         color: "#8B5CF6",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "add-watermark",
@@ -260,6 +236,7 @@ export const PDF_TOOLS = [
         path: "/add-watermark",
         color: "#0EA5E9",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "crop-pdf",
@@ -269,6 +246,7 @@ export const PDF_TOOLS = [
         path: "/crop-pdf",
         color: "#D946EF",
         category: "edit" as ToolCategory,
+        status: "active",
     },
     {
         id: "sign-pdf",
@@ -278,6 +256,7 @@ export const PDF_TOOLS = [
         path: "/sign-pdf",
         color: "#14B8A6",
         category: "security" as ToolCategory,
+        status: "active",
     },
     {
         id: "redact-pdf",
@@ -287,6 +266,7 @@ export const PDF_TOOLS = [
         path: "/redact-pdf",
         color: "#1E293B",
         category: "security" as ToolCategory,
+        status: "active",
     },
     {
         id: "compare-pdf",
@@ -296,6 +276,7 @@ export const PDF_TOOLS = [
         path: "/compare-pdf",
         color: "#A855F7",
         category: "edit" as ToolCategory,
+        status: "upcoming",
     },
     {
         id: "translate-pdf",
@@ -305,5 +286,19 @@ export const PDF_TOOLS = [
         path: "/translate-pdf",
         color: "#EC4899",
         category: "convert" as ToolCategory,
+        status: "upcoming",
+    },
+    {
+        id: "ocr-pdf",
+        name: "OCR PDF",
+        description: "Extract text from scanned PDFs using OCR",
+        icon: "convert",
+        path: "/ocr-pdf",
+        color: "#6366F1",
+        category: "optimize" as ToolCategory,
+        status: "upcoming",
     },
 ];
+
+export const PDF_TOOLS = ALL_PDF_TOOLS.filter((tool) => tool.status === "active");
+export const UPCOMING_TOOLS = ALL_PDF_TOOLS.filter((tool) => tool.status === "upcoming");

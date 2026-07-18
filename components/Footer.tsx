@@ -3,15 +3,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { SITE_NAME } from "@/lib/constants";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Footer() {
-    const [currentYear, setCurrentYear] = useState(2026);
+    const [currentYear] = useState(() => new Date().getFullYear());
     const [email, setEmail] = useState("");
-
-    useEffect(() => {
-        setCurrentYear(new Date().getFullYear());
-    }, []);
 
     const handleNewsletterSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -67,7 +63,7 @@ export default function Footer() {
                             <li><Link href="/split-pdf" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Split PDF</Link></li>
                             <li><Link href="/compress-pdf" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Compress PDF</Link></li>
                             <li><Link href="/pdf-to-word" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">PDF to Word</Link></li>
-                            <li><Link href="/protect-pdf" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Protect PDF</Link></li>
+                            <li><Link href="/excel-to-pdf" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Excel to PDF</Link></li>
                         </ul>
                     </div>
 
@@ -76,6 +72,7 @@ export default function Footer() {
                         <h3 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Quick Links</h3>
                         <ul className="space-y-2.5">
                             <li><Link href="/#tools" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Tools</Link></li>
+                            <li><Link href="/upcoming-features" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Upcoming Features</Link></li>
                             <li><Link href="/about-us" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">About Us</Link></li>
                             <li><Link href="/blog" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">Blog</Link></li>
                             <li><Link href="/faq" className="text-sm text-gray-500 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">FAQ</Link></li>

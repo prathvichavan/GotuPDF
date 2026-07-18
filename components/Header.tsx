@@ -24,6 +24,21 @@ interface MegaCategory {
     tools: MegaTool[];
 }
 
+function Logo({ className = "", onClick }: { className?: string; onClick?: () => void }) {
+    return (
+        <Link href="/" className={`flex items-center select-none ${className}`} onClick={onClick}>
+            <Image
+                src="/logo.png"
+                alt="GotuPDF Logo"
+                width={140}
+                height={40}
+                priority
+                className="w-[110px] md:w-[140px] h-auto object-contain dark:invert"
+            />
+        </Link>
+    );
+}
+
 const ic = (d: string) => (
     <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" d={d} />
@@ -47,13 +62,11 @@ const MEGA_CATEGORIES: MegaCategory[] = [
         tools: [
             { name: "Compress PDF", href: "/compress-pdf", color: "#DC2626", icon: ic("M19 14l-7 7m0 0l-7-7m7 7V3") },
             { name: "Repair PDF", href: "/repair-pdf", color: "#10B981", icon: ic("M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z") },
-            { name: "OCR PDF", href: "/ocr-pdf", color: "#6366F1", icon: ic("M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z") },
         ],
     },
     {
         title: "Convert to PDF",
         tools: [
-            { name: "Word to PDF", href: "/word-to-pdf", color: "#2563EB", icon: ic("M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z") },
             { name: "Excel to PDF", href: "/excel-to-pdf", color: "#059669", icon: ic("M3 10h18M3 14h18M9 4v16") },
             { name: "JPG to PDF", href: "/jpg-to-pdf", color: "#0891B2", icon: ic("M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z") },
             { name: "PNG to PDF", href: "/png-to-pdf", color: "#DB2777", icon: ic("M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z") },
@@ -64,8 +77,6 @@ const MEGA_CATEGORIES: MegaCategory[] = [
         title: "Convert from PDF",
         tools: [
             { name: "PDF to Word", href: "/pdf-to-word", color: "#2563EB", icon: ic("M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z") },
-            { name: "PDF to Excel", href: "/pdf-to-excel", color: "#059669", icon: ic("M3 10h18M3 14h18M9 4v16") },
-            { name: "PDF to PPT", href: "/pdf-to-ppt", color: "#EA580C", icon: ic("M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z") },
             { name: "PDF to JPG", href: "/pdf-to-jpg", color: "#cc7648", icon: ic("M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z") },
             { name: "PDF to PNG", href: "/pdf-to-png", color: "#7C3AED", icon: ic("M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z") },
         ],
@@ -82,8 +93,6 @@ const MEGA_CATEGORIES: MegaCategory[] = [
     {
         title: "PDF Security",
         tools: [
-            { name: "Protect PDF", href: "/protect-pdf", color: "#DC2626", icon: ic("M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z") },
-            { name: "Unlock PDF", href: "/unlock-pdf", color: "#059669", icon: ic("M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z") },
             { name: "Sign PDF", href: "/sign-pdf", color: "#14B8A6", icon: ic("M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z") },
             { name: "Redact PDF", href: "/redact-pdf", color: "#1E293B", icon: ic("M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21") },
         ],
@@ -92,8 +101,6 @@ const MEGA_CATEGORIES: MegaCategory[] = [
         title: "PDF Intelligence",
         tools: [
             { name: "Jupyter to PDF", href: "/convert-python-jupyter-to-pdf", color: "#8B5CF6", icon: ic("M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4") },
-            { name: "Compare PDF", href: "/compare-pdf", color: "#A855F7", icon: ic("M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2") },
-            { name: "Translate PDF", href: "/translate-pdf", color: "#EC4899", icon: ic("M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129") },
         ],
     },
 ];
@@ -101,11 +108,8 @@ const MEGA_CATEGORIES: MegaCategory[] = [
 /* Convert-PDF sub-dropdown items */
 const CONVERT_ITEMS = [
     { name: "PDF to Word", href: "/pdf-to-word", color: "#2563EB" },
-    { name: "PDF to Excel", href: "/pdf-to-excel", color: "#059669" },
-    { name: "PDF to PPT", href: "/pdf-to-ppt", color: "#EA580C" },
     { name: "PDF to JPG", href: "/pdf-to-jpg", color: "#cc7648" },
     { name: "PDF to PNG", href: "/pdf-to-png", color: "#7C3AED" },
-    { name: "Word to PDF", href: "/word-to-pdf", color: "#2563EB" },
     { name: "Excel to PDF", href: "/excel-to-pdf", color: "#059669" },
     { name: "JPG to PDF", href: "/jpg-to-pdf", color: "#0891B2" },
     { name: "PNG to PDF", href: "/png-to-pdf", color: "#DB2777" },
@@ -122,13 +126,10 @@ export default function Header() {
     const [scrolled, setScrolled] = useState(false);
     const [mobileSection, setMobileSection] = useState<string | null>(null);
     const [themeAnimating, setThemeAnimating] = useState(false);
-    const [mounted, setMounted] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
 
     const megaTimeout = useRef<NodeJS.Timeout | null>(null);
     const convertTimeout = useRef<NodeJS.Timeout | null>(null);
-
-    useEffect(() => { setMounted(true); }, []);
 
     useEffect(() => {
         const onScroll = () => setScrolled(window.scrollY > 10);
@@ -179,20 +180,6 @@ export default function Header() {
         }, 350);
     };
 
-    /* Logo */
-    const Logo = ({ className = "" }: { className?: string }) => (
-        <Link href="/" className={`flex items-center select-none ${className}`} onClick={() => setMobileOpen(false)}>
-            <Image
-                src="/logo.png"
-                alt="GotuPDF Logo"
-                width={140}
-                height={40}
-                priority
-                className="w-[110px] md:w-[140px] h-auto object-contain dark:invert"
-            />
-        </Link>
-    );
-
     const navLink = "relative px-3 py-2 text-[13px] font-semibold uppercase tracking-wide text-gray-600 dark:text-slate-200 hover:text-gray-900 dark:hover:text-white transition-colors";
 
     return (
@@ -230,7 +217,7 @@ export default function Header() {
                             >
                                 <button className={`${navLink} flex items-center gap-1`} suppressHydrationWarning>
                                     Convert PDF
-                                    <svg className={`w-3.5 h-3.5 transition-transform ${mounted && convertOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                                    <svg className={`w-3.5 h-3.5 transition-transform ${convertOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
@@ -259,11 +246,15 @@ export default function Header() {
                             >
                                 <button className={`${navLink} flex items-center gap-1 !text-red-500 dark:!text-red-400 hover:!text-red-600 dark:hover:!text-red-300`} suppressHydrationWarning>
                                     All PDF Tools
-                                    <svg className={`w-3.5 h-3.5 transition-transform ${mounted && megaOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                                    <svg className={`w-3.5 h-3.5 transition-transform ${megaOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                                     </svg>
                                 </button>
                             </div>
+
+                            <Link href="/upcoming-features" className={`${navLink} !text-amber-500 dark:!text-amber-400 hover:!text-amber-600 dark:hover:!text-amber-300`} suppressHydrationWarning>
+                                Upcoming Features
+                            </Link>
                         </nav>
 
                         {/* Right side */}
@@ -321,7 +312,7 @@ export default function Header() {
 
                             <span className="w-px h-5 bg-gray-200 dark:bg-white/10" />
 
-                            {!mounted || status === "loading" ? (
+                            {status === "loading" ? (
                                 <div className="w-8 h-8 rounded-full bg-gray-200 dark:bg-white/10 animate-pulse" />
                             ) : session ? (
                                 <div className="relative">

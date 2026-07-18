@@ -56,6 +56,7 @@ function buildAllSiteUrls(siteUrl) {
         "/dmca",
         "/faq",
         "/blog",
+        "/upcoming-features",
     ];
     staticPaths.forEach((path) => urls.push(`${siteUrl}${path}`));
 
@@ -65,16 +66,11 @@ function buildAllSiteUrls(siteUrl) {
         "/split-pdf",
         "/compress-pdf",
         "/pdf-to-word",
-        "/word-to-pdf",
         "/pdf-to-jpg",
         "/jpg-to-pdf",
         "/pdf-to-png",
         "/png-to-pdf",
-        "/pdf-to-excel",
         "/excel-to-pdf",
-        "/pdf-to-ppt",
-        "/protect-pdf",
-        "/unlock-pdf",
         "/rotate-pdf",
         "/reorder-pdf",
         "/edit-pdf",

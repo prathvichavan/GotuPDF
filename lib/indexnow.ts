@@ -455,6 +455,7 @@ export async function getAllSiteUrls(): Promise<string[]> {
         "/dmca",
         "/faq",
         "/blog",
+        "/upcoming-features",
     ];
     for (const path of staticPaths) {
         urls.push(`${SITE_URL}${path}`);

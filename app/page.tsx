@@ -1,10 +1,8 @@
 import ToolsGrid from "@/components/ToolsGrid";
-import HomeSEOContent from "@/components/HomeSEOContent";
 import AntigravityBackground from "@/components/AntigravityBackground";
 import HowItWorks from "@/components/HowItWorks";
-import WhyChooseUs from "@/components/WhyChooseUs";
 import Stats from "@/components/Stats";
-import { SITE_NAME, SITE_URL } from "@/lib/constants";
+import { PDF_TOOLS, SITE_URL } from "@/lib/constants";
 import { generateHomeMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
 
@@ -68,7 +66,7 @@ export default function Home() {
                             <span className="gradient-text">Every Task</span>
                         </h2>
                         <p className="text-gray-500 dark:text-slate-400">
-                            Choose from 25+ tools to merge, split, convert, compress, and more.
+                            Choose from {PDF_TOOLS.length} tools to merge, split, convert, compress, and more.
                         </p>
                     </div>
                     <ToolsGrid />
