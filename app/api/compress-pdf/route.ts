@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PDFDocument, PDFName, PDFArray, PDFDict } from "pdf-lib";
+import { PDFDocument, PDFName, PDFDict, PDFRef, PDFRawStream } from "pdf-lib";
+import { decodePDFRawStream } from "pdf-lib/cjs/core";
+import { inflateSync } from "node:zlib";
 import sharp from 'sharp';
 import { withUsageLimit } from "@/lib/usageLimiter";
 
@@ -24,8 +26,8 @@ export async function POST(request: NextRequest) {
             // Get compression settings based on level
             const compressionSettings = getCompressionSettings(compressionLevel);
 
-            // Compress images in the PDF
-            await compressPDFImages(pdfDoc, compressionSettings);
+            // Compress images in the PDF by re-encoding image streams when possible.
+            const compressedImages = await compressPDFImages(pdfDoc, compressionSettings);
 
             // Remove unnecessary data
             if (compressionSettings.stripMetadata) {
@@ -63,6 +65,8 @@ export async function POST(request: NextRequest) {
                     "X-Original-Size": originalSize.toString(),
                     "X-Compressed-Size": compressedSize.toString(),
                     "X-Compression-Ratio": `${compressionRatio}%`,
+                    "X-Compression-Method": compressedImages > 0 ? "image-reencode" : "structure-only",
+                    "X-Compressed-Images": compressedImages.toString(),
                 },
             });
 
@@ -116,100 +120,129 @@ function getCompressionSettings(level: string) {
 /**
  * Compress images within a PDF document
  */
-async function compressPDFImages(pdfDoc: PDFDocument, settings: any): Promise<void> {
+async function compressPDFImages(pdfDoc: PDFDocument, settings: any): Promise<number> {
     try {
-        const pages = pdfDoc.getPages();
-        
-        // Get all image objects from the PDF
-        const pdfImages: any[] = [];
-        const context = pdfDoc.context;
-        const xObjects = context.enumerateIndirectObjects();
+        // Find image XObjects referenced by page resources.
+        const pdfImages: Array<{ ref: PDFRef; stream: PDFRawStream }> = [];
 
-        for (const [ref, object] of xObjects) {
-            if (object instanceof PDFDict) {
-                const type = object.get(PDFName.of('Type'));
-                const subtype = object.get(PDFName.of('Subtype'));
-                
-                if (subtype && subtype.toString() === '/XObject') {
-                    const xObjectType = object.get(PDFName.of('Subtype'));
-                    if (xObjectType && xObjectType.toString() === '/Image') {
-                        pdfImages.push({ ref, dict: object });
+        for (const page of pdfDoc.getPages()) {
+            const pageNode = (page as any).node;
+            const resources = typeof pageNode.Resources === "function"
+                ? pageNode.Resources()
+                : pageNode.lookup?.(PDFName.of('Resources'), PDFDict);
+
+            if (!(resources instanceof PDFDict)) continue;
+
+            const xObjectDict = resources.lookupMaybe(PDFName.of('XObject'), PDFDict);
+            if (!xObjectDict) continue;
+
+            for (const [, value] of xObjectDict.entries()) {
+                if (value instanceof PDFRef) {
+                    const resolved = pdfDoc.context.lookupMaybe(value, PDFRawStream);
+                    if (resolved) {
+                        const subtype = resolved.dict.get(PDFName.of('Subtype'));
+                        if (subtype && subtype.toString() === '/Image') {
+                            pdfImages.push({ ref: value, stream: resolved });
+                        }
+                    }
+                } else if (value instanceof PDFRawStream) {
+                    const subtype = value.dict.get(PDFName.of('Subtype'));
+                    if (subtype && subtype.toString() === '/Image') {
+                        const ref = pdfDoc.context.getObjectRef(value);
+                        if (ref) {
+                            pdfImages.push({ ref, stream: value });
+                        }
                     }
                 }
             }
         }
 
+        let compressedCount = 0;
+
         // Compress each image
-        for (const { ref, dict } of pdfImages) {
+        for (const { ref, stream } of pdfImages) {
             try {
-                await compressImageObject(pdfDoc, ref, dict, settings);
+                const compressed = await compressImageObject(pdfDoc, ref, stream, settings);
+                if (compressed) compressedCount++;
             } catch (error) {
                 console.warn('Failed to compress an image:', error);
             }
         }
+
+        return compressedCount;
     } catch (error) {
         console.warn('Error during image compression:', error);
     }
+
+    return 0;
 }
 
 /**
  * Compress a specific image object in the PDF
  */
-async function compressImageObject(pdfDoc: PDFDocument, ref: any, dict: PDFDict, settings: any): Promise<void> {
+async function compressImageObject(pdfDoc: PDFDocument, ref: any, stream: PDFRawStream, settings: any): Promise<boolean> {
     try {
+        const dict = stream.dict;
         const width = dict.get(PDFName.of('Width'));
         const height = dict.get(PDFName.of('Height'));
-        const colorSpace = dict.get(PDFName.of('ColorSpace'));
         const filter = dict.get(PDFName.of('Filter'));
+        const colorSpace = dict.get(PDFName.of('ColorSpace'));
 
         // Skip if already well compressed
-        if (filter && filter.toString().includes('DCTDecode')) {
-            return;
+        if (filter && (filter.toString().includes('DCTDecode') || filter.toString().includes('JPXDecode'))) {
+            return false;
         }
 
-        // Get image data
-        const stream = dict.context.lookup(ref);
-        if (!stream || !('getContents' in stream)) {
-            return;
+        if (!width || !height) {
+            return false;
         }
 
-        let imageBuffer: Uint8Array;
-        try {
-            imageBuffer = (stream as any).getContents();
-        } catch {
-            return;
-        }
+        const decodedStream = decodePDFRawStream(stream).decode();
+        const imageBuffer = Buffer.from(decodedStream);
+        const inflatedBuffer = inflatePDFImageBuffer(imageBuffer);
+
+        console.log("compress-pdf image stream", {
+            ref: ref.toString(),
+            decodedLength: imageBuffer.length,
+            inflatedLength: inflatedBuffer?.length ?? null,
+            head: Array.from(imageBuffer.slice(0, 16)).map((value) => value.toString(16).padStart(2, "0")).join(" "),
+        });
 
         if (!imageBuffer || imageBuffer.length === 0) {
-            return;
+            return false;
         }
 
         // Resize if needed
-        const shouldResize = width && height && 
-            (Number(width) > settings.maxWidth || Number(height) > settings.maxHeight);
+        const shouldResize = Number(width) > settings.maxWidth || Number(height) > settings.maxHeight;
 
         if (shouldResize || imageBuffer.length > 10000) {
             try {
-                // Try to compress with sharp
-                let sharpInstance = sharp(Buffer.from(imageBuffer))
-                    .jpeg({ quality: settings.imageQuality, mozjpeg: true });
-
-                if (shouldResize) {
-                    sharpInstance = sharpInstance.resize(settings.maxWidth, settings.maxHeight, {
-                        fit: 'inside',
-                        withoutEnlargement: true,
-                    });
-                }
-
-                const compressedBuffer = await sharpInstance.toBuffer();
+                const compressedBuffer = await compressWithSharp(imageBuffer, {
+                    width: Number(width),
+                    height: Number(height),
+                    quality: settings.imageQuality,
+                    shouldResize,
+                    maxWidth: settings.maxWidth,
+                    maxHeight: settings.maxHeight,
+                    colorSpace,
+                    inflatedBuffer,
+                });
 
                 // Only use compressed version if it's actually smaller
                 if (compressedBuffer.length < imageBuffer.length) {
-                    // Embed the compressed image
-                    const compressedImage = await pdfDoc.embedJpg(compressedBuffer);
-                    
-                    // Update the reference (this is a simplified approach)
-                    // In practice, we'd need to update all references to this image
+                    const newDict = dict.clone(pdfDoc.context);
+                    newDict.set(PDFName.of('Filter'), PDFName.of('DCTDecode'));
+                    newDict.delete(PDFName.of('DecodeParms'));
+                    newDict.delete(PDFName.of('SMask'));
+                    newDict.delete(PDFName.of('Mask'));
+                    if (newDict.has(PDFName.of('ColorSpace'))) {
+                        newDict.set(PDFName.of('ColorSpace'), PDFName.of('DeviceRGB'));
+                    }
+                    newDict.set(PDFName.of('BitsPerComponent'), pdfDoc.context.obj(8));
+
+                    const compressedStream = PDFRawStream.of(newDict, compressedBuffer);
+                    pdfDoc.context.assign(ref, compressedStream);
+                    return true;
                 }
             } catch (error) {
                 // If sharp fails, the image might not be in a supported format
@@ -218,6 +251,117 @@ async function compressImageObject(pdfDoc: PDFDocument, ref: any, dict: PDFDict,
         }
     } catch (error) {
         console.warn('Error compressing image object:', error);
+    }
+
+    return false;
+}
+
+function getImageChannelCount(colorSpace: any): number | null {
+    if (!colorSpace) {
+        return null;
+    }
+
+    const colorSpaceName = colorSpace.toString();
+
+    if (colorSpaceName === '/DeviceRGB') {
+        return 3;
+    }
+
+    if (colorSpaceName === '/DeviceGray') {
+        return 1;
+    }
+
+    if (colorSpaceName === '/DeviceCMYK') {
+        return 4;
+    }
+
+    return null;
+}
+
+async function compressWithSharp(
+    buffer: Buffer,
+    options: {
+        width: number;
+        height: number;
+        quality: number;
+        shouldResize: boolean;
+        maxWidth: number;
+        maxHeight: number;
+        colorSpace: any;
+        inflatedBuffer: Buffer | null;
+    }
+): Promise<Buffer> {
+    const resizeOptions = options.shouldResize
+        ? { fit: 'inside' as const, withoutEnlargement: true }
+        : null;
+
+    try {
+        let pipeline = sharp(buffer).jpeg({ quality: options.quality, mozjpeg: true });
+        if (resizeOptions) {
+            pipeline = pipeline.resize(options.maxWidth, options.maxHeight, resizeOptions);
+        }
+        return await pipeline.toBuffer();
+    } catch (directError) {
+        const channels = getImageChannelCount(options.colorSpace);
+        if (!channels) {
+            throw directError;
+        }
+
+        const rawInput = options.inflatedBuffer ?? buffer;
+
+        let pipeline = sharp(rawInput, {
+            raw: {
+                width: options.width,
+                height: options.height,
+                channels,
+            },
+        }).jpeg({ quality: options.quality, mozjpeg: true });
+
+        if (resizeOptions) {
+            pipeline = pipeline.resize(options.maxWidth, options.maxHeight, resizeOptions);
+        }
+
+        try {
+            return await pipeline.toBuffer();
+        } catch (rawError) {
+            if (rawInput !== buffer) {
+                let fallbackPipeline = sharp(rawInput, {
+                    raw: {
+                        width: options.width,
+                        height: options.height,
+                        channels,
+                    },
+                }).jpeg({ quality: options.quality, mozjpeg: true });
+
+                if (resizeOptions) {
+                    fallbackPipeline = fallbackPipeline.resize(options.maxWidth, options.maxHeight, resizeOptions);
+                }
+
+                return await fallbackPipeline.toBuffer();
+            }
+
+            throw rawError;
+        }
+    }
+}
+
+function inflatePDFImageBuffer(buffer: Buffer): Buffer | null {
+    if (buffer.length < 2) {
+        return null;
+    }
+
+    const firstByte = buffer[0];
+    const secondByte = buffer[1];
+    const looksCompressed = firstByte === 0x78 && (secondByte === 0x01 || secondByte === 0x9c || secondByte === 0xda);
+
+    if (!looksCompressed) {
+        return null;
+    }
+
+    try {
+        return inflateSync(buffer);
+    } catch {
+        return null;
     }
 }
 

@@ -26,6 +26,13 @@ export async function POST(request: NextRequest) {
     let cleanup: (() => Promise<void>) | null = null;
 
     try {
+        if (process.env.VERCEL === "1") {
+            return NextResponse.json(
+                { error: "PDF unlock is not available on Vercel because it requires qpdf. Deploy this feature on a self-hosted server with qpdf installed." },
+                { status: 501 },
+            );
+        }
+
         if (request.signal.aborted) {
             return NextResponse.json({ error: "Upload cancelled." }, { status: 400 });
         }

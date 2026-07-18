@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
     ProtectPdfError,
-    protectPdf,
+    protectPdfPure,
     sanitizeBaseName,
     type PdfPermissions,
-} from "@/lib/protectPdfQpdf";
+} from "@/lib/protectPdf";
+import { protectPdf as protectPdfWithQpdf } from "@/lib/protectPdfQpdf";
 import { withUsageLimit } from "@/lib/usageLimiter";
 
 export const runtime = "nodejs";
@@ -69,13 +70,38 @@ export async function POST(request: NextRequest) {
         const permissions = parsePermissions(permissionsRaw);
         const baseName = sanitizeBaseName(file.name);
 
-        const result = await protectPdf({
-            pdfBytes,
-            outputBaseName: baseName,
-            userPassword,
-            ownerPassword,
-            permissions,
-        });
+        let result;
+        if (process.env.VERCEL === "1") {
+            result = await protectPdfPure({
+                pdfBytes,
+                outputBaseName: baseName,
+                userPassword,
+                ownerPassword,
+                permissions,
+            });
+        } else {
+            try {
+                result = await protectPdfWithQpdf({
+                    pdfBytes,
+                    outputBaseName: baseName,
+                    userPassword,
+                    ownerPassword,
+                    permissions,
+                });
+            } catch (error) {
+                if (error instanceof ProtectPdfError && error.code === "qpdf_not_found") {
+                    result = await protectPdfPure({
+                        pdfBytes,
+                        outputBaseName: baseName,
+                        userPassword,
+                        ownerPassword,
+                        permissions,
+                    });
+                } else {
+                    throw error;
+                }
+            }
+        }
 
         const headers = new Headers();
         headers.set("Content-Type", result.contentType);

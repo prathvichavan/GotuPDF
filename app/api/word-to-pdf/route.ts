@@ -8,6 +8,13 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
     return withUsageLimit(request, async () => {
         try {
+        if (process.env.VERCEL === "1" || process.platform !== "win32") {
+            return NextResponse.json(
+                { error: "Word-to-PDF requires Microsoft Word on a Windows server. This feature cannot run on Vercel." },
+                { status: 501 },
+            );
+        }
+
         const formData = await request.formData();
         const file = formData.get("file0") as File;
 
