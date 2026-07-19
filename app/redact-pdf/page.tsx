@@ -1,4 +1,4 @@
-import RedactPDFTool from "@/components/RedactPDFTool";
+import RedactPDFStudio from "@/components/RedactPDFStudio";
 import { generateToolMetadata } from "@/lib/metadata";
 import { SITE_URL } from "@/lib/constants";
 import type { Metadata } from "next";
@@ -16,7 +16,7 @@ export default function RedactPDFPage() {
     return (
         <>
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-            <RedactPDFTool />
+            <RedactPDFStudio />
         </>
     );
 }
