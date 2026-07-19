@@ -2,11 +2,15 @@ import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IContact extends Document {
     _id: mongoose.Types.ObjectId;
-    name: string;
+    fullName: string;
     email: string;
     subject: string;
     message: string;
+    read: boolean;
+    replied: boolean;
+    source: string;
     ipAddress?: string;
+    userAgent?: string;
     status: "new" | "read" | "replied";
     createdAt: Date;
     updatedAt: Date;
@@ -14,11 +18,10 @@ export interface IContact extends Document {
 
 const ContactSchema = new Schema<IContact>(
     {
-        name: {
+        fullName: {
             type: String,
             required: [true, "Name is required"],
             trim: true,
-            minlength: [2, "Name must be at least 2 characters"],
             maxlength: [100, "Name cannot exceed 100 characters"],
         },
         email: {
@@ -39,10 +42,26 @@ const ContactSchema = new Schema<IContact>(
             type: String,
             required: [true, "Message is required"],
             trim: true,
-            minlength: [10, "Message must be at least 10 characters"],
             maxlength: [2000, "Message cannot exceed 2000 characters"],
         },
+        read: {
+            type: Boolean,
+            default: false,
+        },
+        replied: {
+            type: Boolean,
+            default: false,
+        },
+        source: {
+            type: String,
+            default: "website",
+            trim: true,
+        },
         ipAddress: {
+            type: String,
+            default: null,
+        },
+        userAgent: {
             type: String,
             default: null,
         },
@@ -54,6 +73,7 @@ const ContactSchema = new Schema<IContact>(
     },
     {
         timestamps: true,
+        collection: "contact_page",
     }
 );
 

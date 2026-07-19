@@ -31,49 +31,60 @@ function getClientIP(request: NextRequest): string {
     return forwarded?.split(",")[0].trim() || realIp || "unknown";
 }
 
+function sanitizeText(value: unknown): string {
+    if (typeof value !== "string") return "";
+    return value
+        .replace(/\u0000/g, "")
+        .replace(/[\u0001-\u001F\u007F]/g, "")
+        .trim();
+}
+
+function normalizeEmail(value: unknown): string {
+    return sanitizeText(value).toLowerCase();
+}
+
 // Email validation regex
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Validation function
 function validateContactData(data: {
-    name?: string;
+    fullName?: string;
     email?: string;
     subject?: string;
     message?: string;
 }): { valid: boolean; errors: { field: string; message: string }[] } {
     const errors: { field: string; message: string }[] = [];
 
-    // Name validation
-    if (!data.name || typeof data.name !== "string") {
-        errors.push({ field: "name", message: "Name is required" });
-    } else if (data.name.trim().length < 2) {
-        errors.push({ field: "name", message: "Name must be at least 2 characters" });
-    } else if (data.name.trim().length > 100) {
-        errors.push({ field: "name", message: "Name cannot exceed 100 characters" });
+    const fullName = sanitizeText(data.fullName);
+    const email = normalizeEmail(data.email);
+    const subject = sanitizeText(data.subject);
+    const message = sanitizeText(data.message);
+
+    // Full name validation
+    if (!fullName) {
+        errors.push({ field: "fullName", message: "Full Name is required" });
+    } else if (fullName.length > 100) {
+        errors.push({ field: "fullName", message: "Full Name cannot exceed 100 characters" });
     }
 
     // Email validation
-    if (!data.email || typeof data.email !== "string") {
+    if (!email) {
         errors.push({ field: "email", message: "Email is required" });
-    } else if (!emailRegex.test(data.email.trim())) {
+    } else if (!emailRegex.test(email)) {
         errors.push({ field: "email", message: "Please enter a valid email address" });
     }
 
     // Subject validation
-    if (!data.subject || typeof data.subject !== "string") {
+    if (!subject) {
         errors.push({ field: "subject", message: "Subject is required" });
-    } else if (data.subject.trim().length < 5) {
-        errors.push({ field: "subject", message: "Subject must be at least 5 characters" });
-    } else if (data.subject.trim().length > 200) {
+    } else if (subject.length > 200) {
         errors.push({ field: "subject", message: "Subject cannot exceed 200 characters" });
     }
 
     // Message validation
-    if (!data.message || typeof data.message !== "string") {
+    if (!message) {
         errors.push({ field: "message", message: "Message is required" });
-    } else if (data.message.trim().length < 10) {
-        errors.push({ field: "message", message: "Message must be at least 10 characters" });
-    } else if (data.message.trim().length > 2000) {
+    } else if (message.length > 2000) {
         errors.push({ field: "message", message: "Message cannot exceed 2000 characters" });
     }
 
@@ -119,23 +130,28 @@ export async function POST(request: NextRequest) {
         // Connect to MongoDB
         await connectDB();
 
+        const fullName = sanitizeText(body.fullName ?? body.name);
+        const email = normalizeEmail(body.email);
+        const subject = sanitizeText(body.subject);
+        const message = sanitizeText(body.message);
+
         // Create contact message
         const contact = await Contact.create({
-            name: body.name.trim(),
-            email: body.email.toLowerCase().trim(),
-            subject: body.subject.trim(),
-            message: body.message.trim(),
+            fullName,
+            email,
+            subject,
+            message,
+            read: false,
+            replied: false,
+            source: "website",
             ipAddress: ip,
+            userAgent: request.headers.get("user-agent") || "unknown",
             status: "new",
         });
 
         return NextResponse.json(
-            {
-                success: true,
-                message: "Message sent successfully! We will get back to you soon.",
-                id: contact._id.toString(),
-            },
-            { status: 201 }
+            { success: true },
+            { status: 200 }
         );
     } catch (error) {
         console.error("Contact API Error:", error);
