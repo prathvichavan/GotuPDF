@@ -109,7 +109,7 @@ export default function DragDropUpload({
  return (
  <div>
  <div
- className={`relative overflow-hidden border-2 border-dashed rounded-[2rem] p-8 sm:p-12 text-center transition-all duration-300 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-0.5'}`}
+ className={`relative overflow-hidden border-2 border-dashed rounded-[2rem] p-8 text-center transition-all duration-300 sm:p-12 ${disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:-translate-y-0.5'}`}
  style={{
  borderColor: isDragging ? styleVars.accent : styleVars.uploadBorder,
  backgroundColor: isDragging ? styleVars.uploadHoverBg : styleVars.uploadBg,
@@ -141,14 +141,14 @@ export default function DragDropUpload({
  className="hidden"
  disabled={disabled}
  />
- <div className="relative text-6xl mb-4">{icon}</div>
- <div className="text-xl font-semibold mb-2" style={{ color: styleVars.textPrimary }}>
+ <div className="relative mb-4 text-6xl">{icon}</div>
+ <div className="mb-2 text-xl font-semibold" style={{ color: styleVars.textPrimary }}>
  {title}
  </div>
  <div className="text-base" style={{ color: styleVars.textSecondary }}>
  {subtitle}
  </div>
- <div className="text-sm mt-2" style={{ color: styleVars.textMuted }}>
+ <div className="mt-2 text-sm" style={{ color: styleVars.textMuted }}>
  Maximum file size: {maxSize}MB
  </div>
  </div>

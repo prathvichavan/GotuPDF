@@ -284,13 +284,55 @@ export default function ToolPage({
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-12">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">{toolName}</h1>
-                <p className="text-xl text-gray-500 dark:text-slate-400">{toolDescription}</p>
+        <div className="relative mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+            <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+                <div className="text-center lg:text-left">
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-violet-500 dark:text-violet-300">
+                        Premium PDF workspace
+                    </p>
+                    <h1 className="mb-4 text-4xl font-bold tracking-tight text-gray-900 dark:text-white md:text-5xl lg:text-6xl">
+                        {toolName}
+                    </h1>
+                    <p className="mx-auto max-w-2xl text-lg leading-8 text-gray-600 dark:text-slate-400 md:text-xl lg:mx-0">
+                        {toolDescription}
+                    </p>
+                    <div className="mt-6 flex flex-wrap justify-center gap-3 text-sm text-gray-600 dark:text-slate-400 lg:justify-start">
+                        <span className="rounded-full border border-gray-200/80 bg-white/75 px-4 py-2 dark:border-white/10 dark:bg-white/5">Secure upload flow</span>
+                        <span className="rounded-full border border-gray-200/80 bg-white/75 px-4 py-2 dark:border-white/10 dark:bg-white/5">Responsive layout</span>
+                        <span className="rounded-full border border-gray-200/80 bg-white/75 px-4 py-2 dark:border-white/10 dark:bg-white/5">Fast processing</span>
+                    </div>
+                </div>
+
+                <div className="glass-card rounded-[2rem] p-6 shadow-[0_20px_80px_rgba(124,58,237,0.08)] sm:p-8">
+                    <div className="grid gap-4 sm:grid-cols-2">
+                        {[
+                            {
+                                title: "Secure",
+                                description: "Clear upload feedback with the current backend flow left untouched.",
+                            },
+                            {
+                                title: "Fast",
+                                description: "The interface is lighter, clearer, and easier to scan before you process.",
+                            },
+                            {
+                                title: "Free",
+                                description: "No extra steps added to the user journey, just a polished front-end experience.",
+                            },
+                            {
+                                title: "Privacy First",
+                                description: "Visible controls and a calm layout make the workflow easier to trust.",
+                            },
+                        ].map((item) => (
+                            <div key={item.title} className="rounded-3xl border border-gray-200/70 bg-white/75 p-4 dark:border-white/5 dark:bg-white/5">
+                                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-violet-500 dark:text-violet-300">{item.title}</p>
+                                <p className="text-sm leading-6 text-gray-600 dark:text-slate-400">{item.description}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            <div className="glass-card rounded-2xl p-8 mb-8">
+            <div className="mt-8 glass-card rounded-[2rem] p-4 sm:p-6 lg:p-8">
                 {!processing && !downloadUrl && (
                     <>
                         <FileUpload
@@ -409,22 +451,35 @@ export default function ToolPage({
             </div>
 
             {instructions && instructions.length > 0 && (
-                <div className="glass-card rounded-xl p-6 mb-8 border-indigo-500/20">
-                    <h3 className="font-semibold text-indigo-600 dark:text-indigo-300 mb-3">How to use:</h3>
-                    <ol className="list-decimal list-inside space-y-2 text-gray-500 dark:text-slate-400">
-                        {instructions.map((instruction, index) => (
-                            <li key={index}>{instruction}</li>
-                        ))}
-                    </ol>
+                <div className="mt-8 grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+                    <div className="rounded-[2rem] border border-gray-200/70 bg-white/85 p-6 dark:border-white/5 dark:bg-white/5">
+                        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-violet-500 dark:text-violet-300">How to use</p>
+                        <h2 className="text-xl font-bold text-gray-900 dark:text-white">Follow the steps in order</h2>
+                        <p className="mt-3 text-sm leading-7 text-gray-600 dark:text-slate-400">
+                            The processing logic stays exactly the same. This section just makes the sequence easier to scan before you start.
+                        </p>
+                    </div>
+                    <div className="rounded-[2rem] border border-gray-200/70 bg-white/85 p-6 dark:border-white/5 dark:bg-white/5">
+                        <ol className="grid gap-3 sm:grid-cols-2">
+                            {instructions.map((instruction, index) => (
+                                <li key={index} className="flex gap-3 rounded-2xl border border-gray-200/70 bg-gray-50/80 p-4 text-sm leading-6 text-gray-600 dark:border-white/5 dark:bg-white/5 dark:text-slate-400">
+                                    <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-violet-500/10 text-xs font-bold text-violet-600 dark:text-violet-300">
+                                        {index + 1}
+                                    </span>
+                                    <span>{instruction}</span>
+                                </li>
+                            ))}
+                        </ol>
+                    </div>
                 </div>
             )}
 
             {/* Features */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-3 lg:grid-cols-5">
                 {[
                     {
                         title: "Secure",
-                        description: "Files are encrypted and deleted after processing",
+                        description: "Clear upload feedback and privacy-first presentation.",
                         icon: (
                             <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -433,7 +488,7 @@ export default function ToolPage({
                     },
                     {
                         title: "Fast",
-                        description: "Process files in seconds with our optimized engine",
+                        description: "Responsive cards and lighter spacing reduce visual friction.",
                         icon: (
                             <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -442,15 +497,33 @@ export default function ToolPage({
                     },
                     {
                         title: "Free",
-                        description: "No registration or payment required",
+                        description: "No new logic, no hidden steps, no change to the backend flow.",
                         icon: (
                             <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         ),
                     },
+                    {
+                        title: "Privacy First",
+                        description: "The interface keeps file work obvious and approachable.",
+                        icon: (
+                            <svg className="w-6 h-6 text-fuchsia-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 7a9 9 0 0118 0v5a9 9 0 11-18 0V7z" />
+                            </svg>
+                        ),
+                    },
+                    {
+                        title: "Works Everywhere",
+                        description: "Designed to scale cleanly from desktop to mobile browsers.",
+                        icon: (
+                            <svg className="w-6 h-6 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.75 17H7a2 2 0 01-2-2V7a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.75m-4.5 0v2.25m0 0h4.5M12 19.25h0" />
+                            </svg>
+                        ),
+                    },
                 ].map((feature, index) => (
-                    <div key={index} className="text-center p-6 glass-card rounded-xl">
+                    <div key={index} className="rounded-[1.5rem] border border-gray-200/70 bg-white/80 p-6 text-center shadow-sm backdrop-blur-sm dark:border-white/5 dark:bg-white/5">
                         <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/5 mb-3">
                             {feature.icon}
                         </div>

@@ -133,6 +133,11 @@ body {
   min-height: 100vh;
 }
 
+::selection {
+  background: rgba(124, 58, 237, 0.18);
+  color: var(--text-primary);
+}
+
 /* Smooth theme transition (applied programmatically) */
 html.theme-transition,
 html.theme-transition *,
@@ -319,6 +324,16 @@ input[type="submit"], input[type="button"] {
   transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   font-weight: 500;
+}
+
+button:focus-visible,
+a:focus-visible,
+[role="button"]:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
 }
 
 button:hover:not(:disabled),

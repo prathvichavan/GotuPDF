@@ -67,16 +67,17 @@ export default function ToolsGrid() {
     return (
         <div>
             {/* Category Filter Tabs */}
-            <div className="flex flex-wrap gap-2 mb-8" suppressHydrationWarning>
+            <div className="mb-8 flex flex-wrap gap-2" suppressHydrationWarning>
                 {TOOL_CATEGORIES.map((cat) => (
                     <button
                         key={cat.id}
                         onClick={() => setActiveCategory(cat.id)}
                         suppressHydrationWarning
-                        className={`px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border ${
+                        aria-pressed={activeCategory === cat.id}
+                        className={`rounded-full border px-5 py-2.5 text-sm font-medium transition-all duration-300 ${
                             activeCategory === cat.id
-                                ? "bg-gradient-to-r from-indigo-500 to-purple-600 text-white border-transparent shadow-lg shadow-indigo-500/25"
-                                : "glass border-gray-200 dark:border-white/10 text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white hover:border-indigo-500/30"
+                                ? "border-transparent bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white shadow-lg shadow-violet-500/25"
+                                : "glass border-gray-200 text-gray-600 hover:border-violet-500/30 hover:text-gray-900 dark:border-white/10 dark:text-slate-400 dark:hover:text-white"
                         }`}
                     >
                         {cat.label}
@@ -85,23 +86,23 @@ export default function ToolsGrid() {
             </div>
 
             {/* Tools Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div className="grid auto-rows-fr grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredTools.map((tool) => {
                     return (
                     <Link
                         key={tool.id}
                         href={tool.path}
-                        className="group relative glass-card rounded-2xl p-6 hover:border-indigo-500/30 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                        className="group relative flex h-full flex-col rounded-[1.75rem] border border-gray-200/70 bg-white/80 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-violet-500/30 hover:shadow-[0_20px_60px_rgba(124,58,237,0.12)] dark:border-white/5 dark:bg-white/5"
                     >
                         {/* Top accent line */}
                         <div
-                            className="absolute top-0 left-4 right-4 h-[2px] rounded-b-full opacity-40 group-hover:opacity-80 transition-opacity"
+                            className="absolute left-4 right-4 top-0 h-[2px] rounded-b-full opacity-40 transition-opacity group-hover:opacity-80"
                             style={{ background: `linear-gradient(90deg, transparent, ${tool.color}, transparent)` }}
                         />
 
                         {/* Icon */}
                         <div
-                            className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 transition-all duration-300 group-hover:scale-110"
+                            className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl transition-all duration-300 group-hover:scale-110"
                             style={{
                                 backgroundColor: `${tool.color}15`,
                                 boxShadow: `0 0 0 1px ${tool.color}20`,
@@ -111,15 +112,15 @@ export default function ToolsGrid() {
                         </div>
 
                         {/* Content */}
-                        <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1.5 group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">
+                        <h3 className="text-base font-semibold text-gray-900 transition-colors group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-300">
                             {tool.name}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-slate-400 leading-relaxed mb-4">{tool.description}</p>
+                        <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-slate-400">{tool.description}</p>
 
                         {/* CTA */}
-                        <div className="flex items-center text-sm font-medium text-indigo-400 group-hover:text-indigo-300 transition-colors">
-                            <span className="group-hover:translate-x-1 transition-transform">Use Tool</span>
-                            <svg className="w-4 h-4 ml-1.5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="mt-auto flex items-center pt-5 text-sm font-medium text-violet-600 transition-colors group-hover:text-violet-500 dark:text-violet-300 dark:group-hover:text-violet-200">
+                            <span className="transition-transform group-hover:translate-x-1">Use Tool</span>
+                            <svg className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
                         </div>

@@ -49,30 +49,30 @@ export default function HowItWorks() {
     }, []);
 
     return (
-        <section id="how-it-works" className="py-24 relative overflow-hidden scroll-mt-24" ref={ref}>
+        <section id="how-it-works" className="relative overflow-hidden py-24 scroll-mt-24" ref={ref}>
             {/* Background glow */}
             <div className="absolute inset-0 gradient-bg-section" />
 
             <div className="relative z-10 w-full px-6 sm:px-8 lg:px-12 xl:px-16">
-                <div className="text-center mb-16">
-                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-500 dark:text-violet-300 mb-3">
+                <div className="mx-auto mb-16 max-w-3xl text-center">
+                    <p className="mb-3 text-xs font-semibold uppercase tracking-[0.24em] text-violet-500 dark:text-violet-300">
                         How It Works
                     </p>
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                    <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white md:text-4xl">
                         How It{" "}
                         <span className="gradient-text">Works</span>
                     </h2>
-                    <p className="text-gray-600 dark:text-slate-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
+                    <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-gray-600 dark:text-slate-400 md:text-lg">
                         Three simple steps to transform your documents
                     </p>
                 </div>
 
                 <div className="max-w-5xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 relative">
+                    <div className="relative grid grid-cols-1 gap-6 md:grid-cols-3 md:gap-8">
                         {/* Connecting line (desktop) */}
-                        <div className="hidden md:block absolute top-20 left-[18%] right-[18%] h-[2px]">
+                        <div className="absolute left-[18%] right-[18%] top-20 hidden h-[2px] md:block">
                             <div
-                                className="h-full bg-gradient-to-r from-violet-500/40 via-fuchsia-500/40 to-violet-500/40 rounded-full transition-all duration-1000"
+                                className="h-full rounded-full bg-gradient-to-r from-violet-500/40 via-fuchsia-500/40 to-violet-500/40 transition-all duration-1000"
                                 style={{ width: visible ? "100%" : "0%", transitionDelay: "0.3s" }}
                             />
                         </div>
@@ -80,26 +80,26 @@ export default function HowItWorks() {
                         {steps.map((step, index) => (
                             <div
                                 key={index}
-                                className="relative text-center group h-full"
+                                className="group relative h-full text-center"
                                 style={{
                                     opacity: visible ? 1 : 0,
                                     transform: visible ? "translateY(0)" : "translateY(20px)",
                                     transition: `all 0.6s ease-out ${index * 0.2}s`,
                                 }}
                             >
-                                <div className="glass-card h-full rounded-3xl p-8 flex flex-col items-center">
+                                <div className="glass-card flex h-full flex-col items-center rounded-[1.75rem] p-8">
                                     {/* Step circle */}
-                                    <div className="relative inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500/15 to-fuchsia-500/15 border border-violet-500/15 mb-6 group-hover:border-violet-500/35 transition-colors">
-                                        <div className="text-violet-500 dark:text-violet-300 group-hover:text-violet-400 transition-colors">
+                                    <div className="relative mb-6 inline-flex h-20 w-20 items-center justify-center rounded-2xl border border-violet-500/15 bg-gradient-to-br from-violet-500/15 to-fuchsia-500/15 transition-colors group-hover:border-violet-500/35">
+                                        <div className="text-violet-500 transition-colors group-hover:text-violet-400 dark:text-violet-300">
                                             {step.icon}
                                         </div>
-                                        <div className="absolute -top-2 -right-2 w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center text-xs font-bold text-white shadow-lg shadow-violet-500/30">
+                                        <div className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-violet-500 to-fuchsia-500 text-xs font-bold text-white shadow-lg shadow-violet-500/30">
                                             {step.number}
                                         </div>
                                     </div>
 
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">{step.title}</h3>
-                                    <p className="text-gray-600 dark:text-slate-400 text-sm leading-7 max-w-xs mx-auto">
+                                    <h3 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">{step.title}</h3>
+                                    <p className="mx-auto max-w-xs text-sm leading-7 text-gray-600 dark:text-slate-400">
                                         {step.description}
                                     </p>
                                 </div>
