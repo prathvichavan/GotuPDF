@@ -55,21 +55,19 @@ export default function FileUpload({
         <div className="w-full">
             <div
                 {...getRootProps()}
-                className={`
-                    relative border-2 border-dashed rounded-2xl p-12 text-center cursor-pointer
-                    transition-all duration-300 ease-in-out
-                    ${isDragActive
-                        ? "border-indigo-500 bg-indigo-500/10 scale-[1.02]"
-                        : "border-white/15 bg-gray-100 dark:bg-white/5 hover:border-indigo-500/40 hover:bg-white/5/8"
-                    }
-                `}
+                className={`relative overflow-hidden border-2 border-dashed rounded-[2rem] p-8 sm:p-12 text-center cursor-pointer transition-all duration-300 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40 ${
+                    isDragActive
+                        ? "border-violet-500 bg-violet-500/10 scale-[1.01] shadow-[0_20px_80px_rgba(124,58,237,0.12)]"
+                        : "border-gray-200/80 dark:border-white/10 bg-white/80 dark:bg-white/5 hover:border-violet-500/35 hover:bg-violet-500/5"
+                }`}
             >
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.08),transparent_45%)] pointer-events-none" />
                 <input {...getInputProps()} />
                 {children || (
-                    <div className="flex flex-col items-center gap-4">
-                        <div className="w-16 h-16 rounded-2xl bg-indigo-500/100/15 flex items-center justify-center border border-indigo-500/20">
+                    <div className="relative flex flex-col items-center gap-4">
+                        <div className="w-16 h-16 rounded-2xl bg-violet-500/10 flex items-center justify-center border border-violet-500/20 text-violet-500 dark:text-violet-300">
                             <svg
-                                className="w-8 h-8 text-indigo-400"
+                                className="w-8 h-8"
                                 fill="none"
                                 stroke="currentColor"
                                 viewBox="0 0 24 24"
@@ -83,14 +81,14 @@ export default function FileUpload({
                             </svg>
                         </div>
                         <div>
-                            <p className="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-1">
+                            <p className="text-lg sm:text-xl font-semibold text-gray-800 dark:text-slate-100 mb-1">
                                 {isDragActive ? "Drop your files here" : "Drag & drop your files here"}
                             </p>
-                            <p className="text-sm text-gray-400 dark:text-slate-500">
-                                or <span className="text-indigo-400 font-medium">browse</span> to choose files
+                            <p className="text-sm text-gray-600 dark:text-slate-400">
+                                or <span className="text-violet-600 dark:text-violet-300 font-medium">browse</span> to choose files
                             </p>
                         </div>
-                        <p className="text-xs text-gray-400 dark:text-slate-600">
+                        <p className="text-xs text-gray-500 dark:text-slate-500">
                             Maximum file size: {maxSize / 1024 / 1024}MB
                         </p>
                     </div>
@@ -103,7 +101,7 @@ export default function FileUpload({
                 multiple={multiple}
             />
             {error && (
-                <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
                     <p className="text-sm text-red-400 flex items-center gap-2">
                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                             <path

@@ -1,12 +1,33 @@
 
-import React from 'react';
-import { Metadata } from 'next';
-import Link from 'next/link';
+import React from "react";
+import { Metadata } from "next";
+import Link from "next/link";
 import { SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
     title: `Frequently Asked Questions (FAQ) | ${SITE_NAME}`,
     description: 'Find answers to common questions about GotuPDF, including security, file limits, and how to use our free PDF tools.',
+    openGraph: {
+        title: `Frequently Asked Questions (FAQ) | ${SITE_NAME}`,
+        description: 'Find answers to common questions about GotuPDF, including security, file limits, and how to use our free PDF tools.',
+        url: `${SITE_URL}/faq`,
+        siteName: SITE_NAME,
+        type: 'website',
+        images: [
+            {
+                url: `${SITE_URL}/logo.png`,
+                width: 1200,
+                height: 630,
+                alt: `${SITE_NAME} Logo`,
+            },
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: `Frequently Asked Questions (FAQ) | ${SITE_NAME}`,
+        description: 'Find answers to common questions about GotuPDF, including security, file limits, and how to use our free PDF tools.',
+        images: [`${SITE_URL}/logo.png`],
+    },
     alternates: {
         canonical: `${SITE_URL}/faq`,
     },
@@ -64,45 +85,48 @@ export default function FAQPage() {
     ];
 
     return (
-        <div className="bg-white dark:bg-white/5 min-h-screen py-16">
+        <div className="relative min-h-screen py-16 overflow-hidden">
+            <div className="absolute inset-0 gradient-bg-section" />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
             />
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl">
+                    <p className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-500 dark:text-violet-300 mb-3">
+                        Support
+                    </p>
+                    <h1 className="text-4xl font-extrabold text-gray-900 dark:text-white sm:text-5xl tracking-tight">
                         Frequently Asked Questions
                     </h1>
-                    <p className="mt-4 text-xl text-gray-500 dark:text-slate-400">
+                    <p className="mt-4 text-lg sm:text-xl text-gray-600 dark:text-slate-400 leading-relaxed">
                         Have questions? We're here to help.
                     </p>
                 </div>
 
-                <div className="space-y-8">
+                <div className="grid gap-5 md:grid-cols-2">
                     {faqs.map((faq, index) => (
-                        <div key={index} className="bg-white dark:bg-white/5 rounded-2xl shadow-sm border border-gray-200 dark:border-white/5 p-8 transition-shadow hover:shadow-md">
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                        <div key={index} className="glass-card rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1">
+                            <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-3 tracking-tight">
                                 {faq.question}
                             </h3>
-                            <p className="text-gray-500 dark:text-slate-400 leading-relaxed">
+                            <p className="text-gray-600 dark:text-slate-400 leading-7">
                                 {faq.answer}
                             </p>
                         </div>
                     ))}
                 </div>
 
-                <div className="mt-16 text-center bg-indigo-500/10 rounded-2xl p-8 border border-indigo-500/15">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                <div className="mt-16 text-center glass-card rounded-[2rem] p-8 border-violet-500/15">
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 tracking-tight">
                         Still have questions?
                     </h3>
-                    <p className="text-gray-500 dark:text-slate-400 mb-6">
+                    <p className="text-gray-600 dark:text-slate-400 mb-6">
                         We're happy to answer any other questions you might have.
                     </p>
                     <Link
                         href="/contact-us"
-                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors"
-                        style={{ color: '#ffffff' }}
+                        className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-2xl text-white bg-gradient-to-r from-violet-500 to-fuchsia-500 hover:shadow-lg hover:shadow-violet-500/25 transition-all"
                     >
                         Contact Support
                     </Link>

@@ -12,6 +12,7 @@ import ThemeProvider from "@/components/ThemeProvider";
 import AuthProvider from "@/components/AuthProvider";
 import { UsageLimitProvider } from "@/components/UsageLimitProvider";
 import { UsageLimitModals } from "@/components/UsageLimitModals";
+import RouteChrome from "@/components/RouteChrome";
 
 import {
   SITE_NAME,
@@ -192,8 +193,8 @@ export default function RootLayout({
             <ThemeProvider>
               <Header />
 
-              <main className="min-h-screen">
-                {children}
+              <main className="min-h-screen overflow-x-hidden">
+                <RouteChrome>{children}</RouteChrome>
               </main>
 
               <Footer />

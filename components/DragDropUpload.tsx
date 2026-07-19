@@ -109,7 +109,7 @@ export default function DragDropUpload({
  return (
  <div>
  <div
- className={`border-4 border-dashed rounded-xl p-12 text-center transition-all ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}
+ className={`relative overflow-hidden border-2 border-dashed rounded-[2rem] p-8 sm:p-12 text-center transition-all duration-300 ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:-translate-y-0.5'}`}
  style={{
  borderColor: isDragging ? styleVars.accent : styleVars.uploadBorder,
  backgroundColor: isDragging ? styleVars.uploadHoverBg : styleVars.uploadBg,
@@ -141,7 +141,7 @@ export default function DragDropUpload({
  className="hidden"
  disabled={disabled}
  />
- <div className="text-6xl mb-4">{icon}</div>
+ <div className="relative text-6xl mb-4">{icon}</div>
  <div className="text-xl font-semibold mb-2" style={{ color: styleVars.textPrimary }}>
  {title}
  </div>

@@ -284,13 +284,20 @@ export default function ToolPage({
     };
 
     return (
-        <div className="max-w-4xl mx-auto px-4 py-12">
-            <div className="text-center mb-12">
-                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">{toolName}</h1>
-                <p className="text-xl text-gray-500 dark:text-slate-400">{toolDescription}</p>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+            <div className="mx-auto max-w-3xl text-center mb-10 md:mb-12">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-500 dark:text-violet-300 mb-3">
+                    PDF Tool
+                </p>
+                <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4 tracking-tight">
+                    {toolName}
+                </h1>
+                <p className="text-lg md:text-xl text-gray-600 dark:text-slate-400 leading-relaxed">
+                    {toolDescription}
+                </p>
             </div>
 
-            <div className="glass-card rounded-2xl p-8 mb-8">
+            <div className="glass-card rounded-[2rem] p-5 sm:p-7 md:p-8 mb-8 shadow-[0_20px_80px_rgba(124,58,237,0.08)]">
                 {!processing && !downloadUrl && (
                     <>
                         <FileUpload
@@ -302,16 +309,16 @@ export default function ToolPage({
                         {files.length > 0 && (
                             <div className="mt-6">
                                 <div className="flex items-center justify-between mb-3">
-                                    <h3 className="font-semibold text-gray-900 dark:text-white">Selected Files:</h3>
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">Selected Files</h3>
                                     {allowMultiple && files.length > 1 && (
-                                        <span className="text-xs text-gray-400 dark:text-slate-500">Drag to reorder</span>
+                                        <span className="text-xs text-gray-500 dark:text-slate-500">Drag to reorder</span>
                                     )}
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-3">
                                     {files.map((file, index) => (
                                         <div
                                             key={index}
-                                            className={`flex flex-wrap items-center justify-between gap-3 p-3 rounded-lg border transition-colors ${allowMultiple && files.length > 1 ? "cursor-move" : ""} ${dragOverIndex === index ? "border-indigo-500/40 bg-indigo-500/10" : "border-gray-200 dark:border-white/5 bg-gray-100 dark:bg-white/5"} ${draggingIndex === index ? "opacity-60" : ""}`}
+                                            className={`flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl border transition-colors ${allowMultiple && files.length > 1 ? "cursor-move" : ""} ${dragOverIndex === index ? "border-violet-500/40 bg-violet-500/8" : "border-gray-200/80 dark:border-white/5 bg-white/80 dark:bg-white/5"} ${draggingIndex === index ? "opacity-60" : ""}`}
                                             draggable={allowMultiple && files.length > 1}
                                             onDragStart={() => handleDragStart(index)}
                                             onDragOver={(event) => handleDragOver(event, index)}
@@ -319,18 +326,18 @@ export default function ToolPage({
                                             onDragEnd={handleDragEnd}
                                         >
                                             <div className="flex items-center gap-3">
-                                                <svg className="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <svg className="w-5 h-5 text-violet-500 dark:text-violet-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                                                 </svg>
                                                 {allowMultiple && (
-                                                    <span className="text-xs font-semibold text-gray-400 dark:text-slate-500 w-6 text-right">
+                                                    <span className="text-xs font-semibold text-gray-500 dark:text-slate-500 w-6 text-right">
                                                         {index + 1}.
                                                     </span>
                                                 )}
-                                                <span className="text-sm font-medium text-gray-600 dark:text-slate-300">{file.name}</span>
+                                                <span className="text-sm font-medium text-gray-700 dark:text-slate-300 break-all">{file.name}</span>
                                             </div>
                                             <div className="flex items-center gap-2">
-                                                <span className="text-xs text-gray-400 dark:text-slate-500">
+                                                <span className="text-xs text-gray-500 dark:text-slate-500">
                                                     {(file.size / 1024 / 1024).toFixed(2)} MB
                                                 </span>
                                                 <button
@@ -338,7 +345,7 @@ export default function ToolPage({
                                                     onClick={() => removeFile(index)}
                                                     disabled={processing}
                                                     aria-label="Remove file"
-                                                    className="px-2 py-1 text-xs bg-red-500/100/20 text-red-400 rounded-md hover:bg-red-500/100/30 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                                    className="px-2.5 py-1.5 text-xs bg-red-500/10 text-red-500 dark:text-red-300 rounded-lg hover:bg-red-500/15 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                                                 >
                                                     Remove
                                                 </button>
@@ -348,7 +355,7 @@ export default function ToolPage({
                                 </div>
                                 <button
                                     onClick={handleProcess}
-                                    className="mt-6 w-full py-4 btn-primary rounded-xl font-semibold text-lg"
+                                    className="mt-6 w-full py-4 btn-primary rounded-2xl font-semibold text-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
                                 >
                                     Process File{files.length > 1 ? "s" : ""}
                                 </button>
@@ -365,7 +372,7 @@ export default function ToolPage({
 
                 {downloadUrl && !processing && (
                     <div className="text-center py-8">
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 bg-emerald-500/100/20 border border-emerald-500/30">
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 bg-emerald-500/10 border border-emerald-500/20">
                             <svg className="w-10 h-10 text-emerald-400" fill="currentColor" viewBox="0 0 20 20">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                             </svg>
@@ -379,27 +386,27 @@ export default function ToolPage({
                                     type="text"
                                     value={downloadBaseName}
                                     onChange={(event) => setDownloadBaseName(event.target.value)}
-                                    className="flex-1 px-4 py-3 glass border border-gray-200 dark:border-white/10 rounded-lg focus:border-indigo-500/50 focus:outline-none text-gray-900 dark:text-white bg-gray-100 dark:bg-white/5"
+                                    className="flex-1 px-4 py-3 glass border border-gray-200/80 dark:border-white/10 rounded-xl focus:border-violet-500/50 focus:outline-none text-gray-900 dark:text-white bg-white/80 dark:bg-white/5"
                                     placeholder="Enter file name"
                                 />
                                 {downloadExtension && (
-                                    <span className="px-3 py-2 glass rounded-lg text-sm text-gray-400 dark:text-slate-400 border border-gray-200 dark:border-white/10">
+                                    <span className="px-3 py-2 glass rounded-xl text-sm text-gray-500 dark:text-slate-400 border border-gray-200/80 dark:border-white/10">
                                         {downloadExtension}
                                     </span>
                                 )}
                             </div>
-                            <p className="text-xs text-gray-400 dark:text-slate-500 mt-2">Customize the output file name before downloading.</p>
+                            <p className="text-xs text-gray-500 dark:text-slate-500 mt-2">Customize the output file name before downloading.</p>
                         </div>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <button
                                 onClick={handleDownload}
-                                className="px-8 py-4 btn-primary rounded-xl font-semibold"
+                                className="px-8 py-4 btn-primary rounded-2xl font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/40"
                             >
                                 Download File
                             </button>
                             <button
                                 onClick={handleReset}
-                                className="px-8 py-4 btn-ghost rounded-xl font-semibold"
+                                className="px-8 py-4 btn-ghost rounded-2xl font-semibold"
                             >
                                 Process Another File
                             </button>
@@ -409,56 +416,15 @@ export default function ToolPage({
             </div>
 
             {instructions && instructions.length > 0 && (
-                <div className="glass-card rounded-xl p-6 mb-8 border-indigo-500/20">
-                    <h3 className="font-semibold text-indigo-600 dark:text-indigo-300 mb-3">How to use:</h3>
-                    <ol className="list-decimal list-inside space-y-2 text-gray-500 dark:text-slate-400">
+                <div className="glass-card rounded-3xl p-6 mb-8 border-violet-500/15">
+                    <h3 className="font-semibold text-violet-600 dark:text-violet-300 mb-3">How to use</h3>
+                    <ol className="list-decimal list-inside space-y-2 text-gray-600 dark:text-slate-400 leading-7">
                         {instructions.map((instruction, index) => (
                             <li key={index}>{instruction}</li>
                         ))}
                     </ol>
                 </div>
             )}
-
-            {/* Features */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {[
-                    {
-                        title: "Secure",
-                        description: "Files are encrypted and deleted after processing",
-                        icon: (
-                            <svg className="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        ),
-                    },
-                    {
-                        title: "Fast",
-                        description: "Process files in seconds with our optimized engine",
-                        icon: (
-                            <svg className="w-6 h-6 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                            </svg>
-                        ),
-                    },
-                    {
-                        title: "Free",
-                        description: "No registration or payment required",
-                        icon: (
-                            <svg className="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        ),
-                    },
-                ].map((feature, index) => (
-                    <div key={index} className="text-center p-6 glass-card rounded-xl">
-                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gray-100 dark:bg-white/5 mb-3">
-                            {feature.icon}
-                        </div>
-                        <h4 className="font-semibold text-gray-900 dark:text-white mb-2">{feature.title}</h4>
-                        <p className="text-sm text-gray-500 dark:text-slate-400">{feature.description}</p>
-                    </div>
-                ))}
-            </div>
         </div>
     );
 }

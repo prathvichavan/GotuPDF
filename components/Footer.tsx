@@ -15,11 +15,44 @@ export default function Footer() {
     };
 
     return (
-        <footer className="relative border-t border-gray-200 dark:border-white/5 mt-0">
-            {/* Background */}
-            <div className="absolute inset-0 bg-gray-100 dark:bg-[#070b14]" />
+        <footer className="relative border-t border-gray-200/80 dark:border-white/5 mt-0 overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(124,58,237,0.08),transparent_45%)] bg-gray-100 dark:bg-[#070b14]" />
 
             <div className="relative z-10 w-full mx-auto px-6 sm:px-8 lg:px-12 xl:px-16 pt-16 pb-8">
+                <div className="mb-12 rounded-[2rem] border border-gray-200/70 dark:border-white/5 bg-white/70 dark:bg-white/5 p-6 sm:p-8 md:p-10 shadow-[0_20px_80px_rgba(124,58,237,0.06)]">
+                    <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-8 items-center">
+                        <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.24em] text-violet-500 dark:text-violet-300 mb-3">
+                                Newsletter
+                            </p>
+                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight mb-3">
+                                Stay updated on new PDF tools
+                            </h2>
+                            <p className="text-sm sm:text-base text-gray-600 dark:text-slate-400 leading-relaxed max-w-2xl">
+                                Get occasional updates about new tools, improvements, and workflow upgrades without cluttering your inbox.
+                            </p>
+                        </div>
+
+                        <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-2 w-full lg:max-w-md" suppressHydrationWarning>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                className="flex-1 px-4 py-3 rounded-2xl glass border border-gray-200/80 dark:border-white/10 bg-white/90 dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:border-violet-500/50"
+                                suppressHydrationWarning
+                            />
+                            <button
+                                type="submit"
+                                className="px-5 py-3 rounded-2xl bg-gradient-to-r from-violet-500 to-fuchsia-500 text-white text-sm font-medium hover:shadow-lg hover:shadow-violet-500/25 transition-all"
+                                suppressHydrationWarning
+                            >
+                                Subscribe
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
                     {/* Brand */}
                     <div className="lg:col-span-2">
@@ -35,24 +68,6 @@ export default function Footer() {
                         <p className="text-sm text-gray-500 dark:text-slate-500 leading-relaxed mb-6 max-w-sm">
                             Professional PDF tools for all your document needs. Convert, merge, split, and compress PDFs online for free.
                         </p>
-                        {/* Newsletter */}
-                        <form onSubmit={handleNewsletterSubmit} className="flex gap-2 max-w-sm" suppressHydrationWarning>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
-                                className="flex-1 px-4 py-2.5 rounded-lg glass border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-slate-500 focus:outline-none focus:border-indigo-500/50"
-                                suppressHydrationWarning
-                            />
-                            <button
-                                type="submit"
-                                className="px-5 py-2.5 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-600 text-white text-sm font-medium hover:shadow-lg hover:shadow-indigo-500/25 transition-all"
-                                suppressHydrationWarning
-                            >
-                                Subscribe
-                            </button>
-                        </form>
                     </div>
 
                     {/* Popular Tools */}
